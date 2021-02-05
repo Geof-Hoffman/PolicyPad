@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../jquery-3.1.0.min.js"></script>
+    <script src="../bootstrap.js"></script>
+    <link rel="stylesheet" href="index.css">
+    <title>Policy Pad</title>
+    
+  </head>
+  <body>
+
+
+    <div id="myDIV" class="header">
+       <h2 style="margin:5px">PolicyPad</h2> 
+       <div>
+        <input type= "text" id="fileNum" class="file" placeHolder="File Number..."value="">
+        <input type= "button" id="issue" class="fileAction" value="I">
+        <input type= "button" id="problem"  class="fileAction" value="P">
+      <!--  <input type= "button" id="popout" class="topBtn" value="Pop-Out">-->
+      </div> 
+      <div class="selectState"><select id="state" data-toggle="tooltip" title="Select state to begin">
+      </select> <span id="clear" class="addBtn">Clear All</span> </div>
+      <input type="text" id="myInput" data-toggle="tooltip" title="Add items from Curative tab" placeholder="Curative issues">
+      <span id="add" class="addBtn">Add</span>
+      <div><input id="address" data-toggle="tooltip" title="Enter address from Commitment/report/RW" type="text" placeholder="Address..."></div>
+      <div><input id="vesting" type="text" data-toggle="tooltip" title="Enter Vesting from Commitment" placeholder="Vesting..."></div>
+      <div><input id="loanAmount" type="text" data-toggle="tooltip" title="Enter Loan Amount from FLI" placeholder="loan Amount..."></div>
+      <div id="type" data-toggle="tooltip" title="Select Type from FLI" class="select">
+        <select>
+          <option>CONV</option>
+          <option>VA</option>
+          <option>FHA</option>
+        </select> 
+      </div>
+      <div><input id="date" type="date" data-toggle="tooltip" title="Enter date from FLI" placeholder="Mortgage Date..."><span id="copyDate" class="addBtn">Copy</span> </div>
+      
+        <div class=" row show" data-toggle="tooltip" title="Enter Endorsments from FLI">
+          
+          <div class="col-sm"><input type="number" value="9"></div>
+          <div class="col-sm"><input type="number" value="8.1"></div>
+          <div class="col-sm"><input id="optEndOne" type="number" placeholder="Endrs.#" value=""></div>
+          <div class="col-sm"><input id="optEndTwo" type="number" placeholder="Endrs.#"></div>
+          <div class="col-sm"><input id="optEndThree" type="number" placeholder="Endrs.#"></div>
+          
+        </div>
+        <div><input type="number" min="0.01" step="0.01"  data-toggle="tooltip" title="enter gross premium from final rate-calc" id="premium" placeholder="Premium"><span id="copyPremium" class="addBtn">Copy</span> </div>
+        
+  
+        <div class="row" data-toggle="tooltip" title="Enter endorsement costs from rate-calc"id="bar">
+          <div class="col-sm"><input id="costOne"type="number" min="0.01" step="0.01"  placeholder="End$$"></div>
+          <div class="col-sm"><input id="costTwo" type="number" min="0.01" step="0.01"  placeHolder="End$$"></div>
+          <div class="col-sm"><input id="costThree" type="number" min="0.01" step="0.01"  placeholder="End$$"></div>
+          <div class="col-sm"><input id="costFour" type="number" min="0.01" step="0.01"   placeholder="End$$"></div>
+          <div class="col-sm"><input id="costFive" type="number" min="0.01" step="0.01"   placeholder="End$$"></div>
+        </div>
+        
+        <div><input type="number" id="UWsplit"  placeholder="UW Split"><span id="copyUWsplit" data-toggle="tooltip" title="Review documents then generate policy jacket" class="addBtn">Copy</span> </div>
+        <div><input id="checkNum" class="checkNum" type="number" data-toggle="tooltip" title="Enter Check# from Report" placeholder="Check Number..."><span id="copyCheckNum"class="addBtn">Copy</span> </div>
+        <div><h3 id="number"></h3></div>
+        <p id="split"></p>
+  </div>
+    
+    <ul id="myUL"></ul>
+    <ul id="anotherUL"></ul>
+    
+    <button data-val="Melanie S. Johnson"  >Melanie</button>
+   
+    <button data-val="Said deed of trust is secondary and subordinate to the lien of the insured deed of trust set forth under Schedule A hereof.">Sub</button>
+    <button data-val="tran"> tran</button>
+    <button data-val="ctic">ctic</button>
+    <button id="lps" data-toggle="tooltip" title="" data-val="LOAN POLICY SET">LOAN POLICY SET</button>
+    <button data-toggle="tooltip" title="" id="ups" data-val="UW SET">UW SET</button>
+    <button data-val="PI-StarterRepositoryShipments@propertyinsight.biz">FNF Policy Email</button>
+    <button id='jacket' data-toggle="tooltip" title="">Jacket</button>
+    
+  
+  </div>
+  <!--<div id="hidden" class="copy"><input value="I'm hiding"> </div>-->
+  <script src="../renderer.js"></script>
+  <script src="popup.js"></script>
+  </body>
+</html>
