@@ -87,3 +87,6 @@ typings/
 
 # Electron-Forge
 out/
+
+bootstrap.js
+jquery-3.1.0.min.js
