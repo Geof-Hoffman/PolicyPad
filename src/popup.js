@@ -1,46 +1,71 @@
 $(function () {
-    //import input values from storage on open
-    localStorage.getItem(['filesList', 'fileNum', 'address', 'vesting', 'loanAmount',
-        'type', 'date', 'optEndOne', 'premium', 'costOne', 'costTwo', 'costThree', 'costFour', 'costFive',
-        'optEndtwo', 'stateName', 'date', 'checkNum'], function (data) {
-            var workingFile = data.filesList[0];
-            $('#fileNum').val(workingFile).val();
-            $('#checkNum').val(data.checkNum).val();
-
-            $('#address').val(data.address).val();
-            $('#vesting').val(data.vesting).val();
-            $('#loanAmount').val(data.loanAmount).val();
-            $('#type').val(data.type).val();
-            $('#date').val(data.date).val();
-            $('#optEndOne').val(data.optEndOne).val();
-            $('#optEndtwo').val(data.optEndtwo).val();
-            $('#state').val(data.stateName).val();
-            $('#premium').val(data.premium).val();
-            $('#costOne').val(data.costOne).val();
-            $('#costTwo').val(data.costTwo).val();
-            $('#costThree').val(data.costThree).val();
-            $('#costFour').val(data.costFour).val();
-            $('#costFive').val(data.costFive).val();
-            $('#date').val(data.date).val();
-            updateState(data.stateName);
-            checkCalc()
-        });
     //global variable declarations
-    var stateName = '';
+    var stateName;
     var stateArray = [];
     var reviewList = [];
     var finished = [];
     var split = 0;
     var list = document.getElementById('myUL');
     var myNodelist = document.getElementsByTagName('LI');
+    //import input values from storage on open
+    var stored = {};
+    function storedData() {
+        stored.stateName = localStorage.getItem('stateName');
+        stateName = stored.stateName;
+        updateState(stateName);
+        console.log(stateName);
+        stored.filesList = localStorage.getItem('filesList');
+        stored.fileNum = localStorage.getItem('fileNum');
+        stored.address = localStorage.getItem('address');
+        stored.vesting = localStorage.getItem('vesting');
+        stored.loanAmount = localStorage.getItem('loanAmount');
+        stored.type = localStorage.getItem('type');
+        stored.date = localStorage.getItem('date');
+        stored.optEndOne = localStorage.getItem('optEndOne');
+        stored.optEndTwo = localStorage.getItem('optEndTwo');
+        stored.optEndThree = localStorage.getItem('optEndThree');
+        stored.premium = localStorage.getItem('premium');
+        stored.costOne = localStorage.getItem('costOne');
+        stored.costTwo = localStorage.getItem('costTwo')
+        stored.costThree = localStorage.getItem('costThree');
+        stored.costFour = localStorage.getItem('costFour');
+        stored.costFive = localStorage.getItem('costFive')
+        stored.optEndTwo = localStorage.getItem('optEndTwo');
+        stored.stateName = localStorage.getItem('stateName');
+        stored.date = localStorage.getItem('date');
+        stored.checkNum = localStorage.getItem('checkNum');
+        console.log(stored);
+
+        // var workingFile = stored.filesList[0];
+        $('#stateName').val(stored.stateName).val();
+        $('#fileNum').val(stored.fileNum).val();
+        $('#checkNum').val(stored.checkNum).val();
+        $('#address').val(stored.address).val();
+        $('#vesting').val(stored.vesting).val();
+        $('#loanAmount').val(stored.loanAmount).val();
+        $('#type').val(stored.type).val();
+        $('#optEndOne').val(stored.optEndOne).val();
+        $('#optEndTwo').val(stored.optEndTwo).val();
+        $('#optEndThree').val(stored.optEndThree).val();
+        $('#premium').val(stored.premium).val();
+        $('#costOne').val(stored.costOne).val();
+        $('#costTwo').val(stored.costTwo).val();
+        $('#costThree').val(stored.costThree).val();
+        $('#costFour').val(stored.costFour).val();
+        $('#costFive').val(stored.costFive).val();
+        $('#date').val(stored.date).val();
+       
+        checkCalc();
+    };
+    storedData();
     var data = [{
         id: 'VA',
         state: 'Virginia',
         UW: 'CTIC',
-        jacket: 'Refinance Rate –-> Standard Loan -- > REFINANCE LOAN –- > ALTA Short Form Residential Loan Policy 12/03/12 w-VA Mod_434 – Refinance Loan Policy',
+        jacket: 'Refinance Rate \-> Standard Loan -\- > REFINANCE LOAN -\- > ALTA Short Form Residential Loan Policy 12/03/12 w-VA Mod_434 – Refinance Loan Policy',
         split: 13,
         end: false,
-        cpl: '$30',
+        cpl: '$35',
         pud: '5.1',
         signer: 'Melanie S. Johnson',
         review: ['NFT ABA', 'Owner\'s Aff', 'Deed of Trust', 'Executed Settlement Statement'],
@@ -68,7 +93,7 @@ $(function () {
         state: 'Colorado',
         UW: 'CTIC',
         split: 15,
-        jacket: ',',
+        jacket: 'use your best judgment:-)',
         end: { 8.1: 50, 6: 30, 9: '', 4.1: '', 5.1: '' },
         cpl: '$25',
         pud: '5.1/4.1',
@@ -431,17 +456,42 @@ $(function () {
     }
 
     //******EVENT HANDLERS*******
-    $('#state').change(function () {
-        //sets statename to input
+    /**********enter key press moves to next input doesn\twork yet. well come back to this
+    $('body').on('keydown', 'input, select', function(e) {
+        if (e.key === "Enter") {
+            var self = $(this), form = self.parents('form:eq(0)'), focusable, next;
+            focusable = form.find('input,a,select,button,textarea').filter(':visible');
+            next = focusable.eq(focusable.index(this)+1);
+            if (next.length) {
+                next.focus();
+            } else {
+                form.submit();
+            }
+            return false;
+        }
+    });
+
+    */
+    $('#fileNum').keyup(function () {
+        var fileNum = $(this).val();
+        localStorage.setItem('fileNum', fileNum);
+    });
+    $('#stateName').change(function () {
+        //sets statename to input    
         stateName = $(this).val();
-        updateState(stateName);
-        //console.log(stateName);
+       updateState(stateName);
+        });
+        
+    $('#clear').on('click', function () {
+        //sets all variables to ''
+        clear();
+        console.log('storage cleared')
     });
     $('#add').on('click', function () {
         //sends input value to newElement function to be added to list; 
         var e = $(this).val();
         newElement(e);
-    });//ender key clicks add 
+    });//enter key clicks add 
     $('#myInput').keyup(function (event) {
         if (event.keyCode === 13) {
             $('#add').click();
@@ -449,126 +499,122 @@ $(function () {
     });
     $('#address').keyup(function () {
         var address = $(this).val();
-        localStorage.setItem({ 'address': address });
+        localStorage.setItem('address', address);
     });
     $('#vesting').keyup(function () {
         var vesting = $(this).val();
-        localStorage.setItem({ 'vesting': vesting });
+        localStorage.setItem('vesting', vesting);
     });
     $('#loanAmount').keyup(function () {
         var loanAmount = $(this).val();
-        localStorage.setItem({ 'loanAmount': loanAmount });
-      });
-      $('#type').on('change', function () {
-        var type = $(this).val();
-        localStorage.setItem({ 'type': type });
-      });
-      $('#date').on('change', function () {
+        localStorage.setItem('loanAmount', loanAmount);
+    });
+    $('#type').on('change', function () {
+        var type = $(this).val()
+        //   alert(type);        
+        localStorage.setItem('type', type);
+        var oneMOretime = localStorage.getItem('type')
+        console.log(oneMOretime);
+    });
+    $('#date').on('change', function () {
         var date = $(this).val();
-        localStorage.setItem({ 'date': date });
-      });
-      $('#checkNum').on('change mouseup mousedown mouseout keydown', function () {
+        localStorage.setItem('date', date);
+    });
+    $('#checkNum').on('change mouseup mousedown mouseout keydown', function () {
         var checkNum = $(this).val();
-        localStorage.setItem({ 'checkNum': checkNum });
-      });
-      $('#optEndOne').keyup(function () {
+        localStorage.setItem('checkNum', checkNum);
+        var test = localStorage.getItem('checkNum');
+        console.log(test);
+    });
+    $('#optEndOne').keyup(function () {
         var optEndOne = $(this).val();
-        localStorage.setItem({ 'optEndOne': optEndOne });
-      });
-      $('#optEndTwo').keyup(function () {
-        var optEndtwo = $(this).val();
-        localStorage.setItem({ 'optEndtwo': optEndtwo });
-      });
-      $('#optEndThree').keyup(function () {
-        var optEndtwo = $(this).val();
-        localStorage.setItem({ 'optEndtwo': optEndtwo });
-      });
-// Add a "checked" symbol when clicking on a list item
-  list.addEventListener('click', function (ev) { if (ev.target.tagName === 'LI') { ev.target.classList.toggle('checked'); } }, false);
-  var i;
-  for (i = 0; i < myNodelist.length; i++) {
-    var span = document.createElement('SPAN');
-    var txt = document.createTextNode('\u00D7');
-    span.className = 'close';
-    span.appendChild(txt);
-    myNodelist[i].appendChild(span);
-  }
+        localStorage.setItem('optEndOne', optEndOne);
+    });
+    $('#optEndTwo').keyup(function () {
+        var optEndTwo = $(this).val();
+        localStorage.setItem('optEndTwo', optEndTwo);
+
+
+    });
+    $('#optEndThree').keyup(function () {
+        var optEndThree = $(this).val();
+        console.log(optEndThree);
+        localStorage.setItem('optEndThree', optEndThree);
+    });
+    // Add a "checked" symbol when clicking on a list item
+    list.addEventListener('click', function (ev) { if (ev.target.tagName === 'LI') { ev.target.classList.toggle('checked'); } }, false);
+    var i;
+    for (i = 0; i < myNodelist.length; i++) {
+        var span = document.createElement('SPAN');
+        var txt = document.createTextNode('\u00D7');
+        span.className = 'close';
+        span.appendChild(txt);
+        myNodelist[i].appendChild(span);
+    }
     //****************premium split calculator***************
     //handlers for value input
     $('#premium').on('change mouseup mousedown mouseout keydown', function () {
         checkCalc()
         var premium = $(this).val();
-        localStorage.setItem({ 'premium': premium }, function () {
-          console.log('Premium is set to ' + premium);
-        });
-      });
+        localStorage.setItem('premium', premium);
+    });
     $('#costOne').keyup(function () {
         checkCalc();
         var costOne = $(this).val();
-        localStorage.setItem({ 'costOne': costOne }, function () {
-          console.log('First Endorsment fee is set to ' + costOne);
-        });
-      });
-      $('#costTwo').keyup(function () {
+        localStorage.setItem('costOne', costOne);
+    });
+    $('#costTwo').keyup(function () {
         checkCalc()
         var costTwo = $(this).val();
-        localStorage.setItem({ 'costTwo': costTwo }, function () {
-          console.log('Second Endorsment fee is set to ' + costTwo);
-        });
-      });
-      $('#costThree').keyup(function () {
+        localStorage.setItem('costTwo', costTwo);
+    });
+    $('#costThree').keyup(function () {
         checkCalc()
         var costThree = $(this).val();
-        localStorage.setItem({ 'costThree': costThree }, function () {
-          console.log('Third Endorsment fee is set to ' + costThree);
-        });
-      });
-      $('#costFour').keyup(function () {
+        localStorage.setItem('costThree', costThree);
+    });
+    $('#costFour').keyup(function () {
         checkCalc();
         var costFour = $(this).val();
-        localStorage.setItem({ 'costFour': costFour }, function () {
-          console.log('Fourth Endorsment fee is set to ' + costFour);
-        });
-      });
-      $('#costFive').keyup(function () {
+        localStorage.setItem('costFour', costFour);
+    });
+    $('#costFive').keyup(function () {
         checkCalc();
-        var costFour = $(this).val();
-        localStorage.setItem({ 'costFive': costFive }, function () {
-          console.log('Fifth Endorsment fee is set to ' + costFive);
-        });
-      });
-      //Calc Function
-      function checkCalc() {
+        var costFive = $(this).val();
+        localStorage.setItem('costFive', costFive);
+    });
+    //Calc Function
+    function checkCalc() {
         //captures numbers from inputs 
         var premium = parseFloat($('#premium').val());
         if (isNaN(premium)) {
-          premium = 0;
+            premium = 0;
         }
         var costOne = parseFloat($('#costOne').val());
         if (isNaN(costOne)) {
-          costOne = 0;
+            costOne = 0;
         }
         var costTwo = parseFloat($('#costTwo').val());
         if (isNaN(costTwo)) {
-          costTwo = 0;
+            costTwo = 0;
         }
         var costThree = parseFloat($('#costThree').val());
         if (isNaN(costThree)) {
-          costThree = 0;
+            costThree = 0;
         }
         var costFour = parseFloat($('#costFour').val());
         if (isNaN(costFour)) {
-          costFour = 0;
+            costFour = 0;
         }
         var costFive = parseFloat($('#costFive').val());
         if (isNaN(costFive)) {
-          costFive = 0;
+            costFive = 0;
         }
         var total = parseFloat(premium) + parseFloat(costOne) + parseFloat(costTwo) + parseFloat(costThree) + parseFloat(costFour) + parseFloat(costFive);
         var totalFixed = total * split;
         var UWcheck = totalFixed.toFixed(2);
         $('#UWsplit').val(UWcheck).val();
-      };
+    };
 
     //*****FUNCTIONS*********
     function displayStates() {
@@ -578,21 +624,25 @@ $(function () {
             output += '<option>' + data[i].state + '</option>';
         }
 
-        document.getElementById('state').innerHTML = output;
+        document.getElementById('stateName').innerHTML = output;
     };
     displayStates();
     hideItem();
+
     function updateState(stateName) {
+        $('#stateName').val(stateName).val(); 
         list.innerHTML = '';  //clears list
-        localStorage.setItem({ 'stateName': stateName }, function () {
-            // console.log('StateName is set to ' + stateName);
-        });
+        localStorage.setItem('stateName', stateName);
         stateArray = find(data, index => index.state === stateName);
+        //console.log(stateArray);
         //updates variable stateArray to the new state
-        reviewList = stateArray.review; //sets value of review list to new state
-        display = stateArray.end;
-        split = stateArray.split / 100;
-        $('.foo').toggle(display);
+
+        reviewList = (stateArray) ? stateArray.review : [];//sets value of review list to new state
+        //console.log(reviewList);
+        //display is a bolean that is used to determine if the endorsment cost inputs should be displayed/
+        display = (stateArray) ? stateArray.end : '';
+        split = (stateArray) ? stateArray.split / 100 : 0;
+
         $('#bar').toggle(display);
         for (var i = 0; i < reviewList.length; i++) {   //adds review items to list
             // Create DOM element
@@ -610,19 +660,19 @@ $(function () {
             myNodelist[i].appendChild(span);
         }
         //console.log(stateArray);
-        $('#split').text(`UW: ${stateArray.UW} split: ${stateArray.split} CPL: ${stateArray.cpl}`);
+        $('#split').text(`UW: ${stateArray ? stateArray.UW : ''} \n split: ${stateArray ? stateArray.split : ''}\n CPL: ${stateArray ? stateArray.cpl : ''} \nRider:${stateArray ? stateArray.pud : ''}`);
 
-        var lps = data[data.findIndex(data => data.state === stateName)].lps;
+        var lps = (stateArray) ? data[data.findIndex(data => data.state === stateName)].lps : [];
         //console.log(LPS);
         $("#lps").attr("title", lps);
-        var ups = data[data.findIndex(data => data.state === stateName)].ups;
-        var jacket = data[data.findIndex(data => data.state === stateName)].jacket;
-        console.log(jacket);
+        var ups = (stateArray) ? data[data.findIndex(data => data.state === stateName)].ups : [];;
+        var jacket = (stateArray) ? data[data.findIndex(data => data.state === stateName)].jacket : '';
+        //console.log(jacket);
         $("#ups").attr("title", ups);
         $("#jacket").attr("title", jacket);
-
-
     };
+
+
     // Create a new list item when clicking on the 'Add' button
     function newElement() {
         var li = document.createElement('li');
@@ -662,39 +712,56 @@ $(function () {
     };
     //handler for x delete
     $('#myUL').on('click', () =>
-    hideItem()
-  );
+        hideItem()
+    );
     function clear() {
-        localStorage.setItem({
-            'fileNum': '', 'optEndtwo': '', 'address': '', 'vesting': '', 'loanAmount': '',
-            'type': '', 'date': '', 'optEndOne': '', 'premium': '', 'checkNum': '',
-            'costOne': '', 'costTwo': '', 'costThree': '', 'costFour': '',
-            'date': ''
-        }, function () {
-            $('#fileNum').val(data.fileNum).val();
-            $('#address').val(data.address).val();
-            $('#vesting').val(data.vesting).val();
-            $('#loanAmount').val(data.loanAmount).val();
-            $('#type').val(data.type).val();
-            $('#date').val(data.date).val();
-            $('#optEndOne').val(data.optEndOne).val();
-            $('#optEndTwo').val(data.optEndTwo).val();
-            $('#premium').val(data.premium).val();
-            $('#costOne').val(data.costOne).val();
-            $('#costTwo').val(data.costTwo).val();
-            $('#costThree').val(data.costThree).val();
-            $('#costFour').val(data.costFour).val();
-            $('#date').val(data.date).val();
-            $('#checkNum').val(data.checkNum).val();
-            checkCalc();
-            updateState(stateName);
+
+        localStorage.setItem('fileNum', '');
+        localStorage.setItem('address', '');
+        localStorage.setItem('vesting', '');
+        localStorage.setItem('loanAmount', '');
+        localStorage.setItem('type', '');
+        localStorage.setItem('date', '');
+        localStorage.setItem('optEndOne', '');
+        localStorage.setItem('optEndTwo', '');
+        localStorage.setItem('optEndThree', '');
+        localStorage.setItem('premium', '');
+        localStorage.setItem('costOne', '');
+        localStorage.setItem('costTwo', '')
+        localStorage.setItem('costThree', '');
+        localStorage.setItem('costFour', '');
+        localStorage.setItem('costFive', '')
+        localStorage.setItem('stateName', '');
+        localStorage.setItem('date', '');
+        localStorage.setItem('checkNum', '');
 
 
-        });
-        if (stateArray.end != false) { $('#bar').toggle(display) };
-        checkCalc()
+        $('#fileNum').val('').val();
+        $('#address').val('').val();
+        $('#vesting').val('').val();
+        $('#loanAmount').val('').val();
+        $('#type').val('').val();
+        $('#date').val('').val();
+        $('#optEndOne').val('').val();
+        $('#optEndTwo').val('').val();
+        $('#optEndThree').val('').val();
+        $('#premium').val('').val();
+        $('#costOne').val('').val();
+        $('#costTwo').val('').val();
+        $('#costThree').val('').val();
+        $('#costFour').val('').val();
+        $('#costFive').val('').val();
+        $('#date').val('').val();
+        $('#checkNum').val('').val();        
+        updateState(stateName);
+        if (stateArray.end != false) { 
+            $('#bar').toggle(display) 
+            checkCalc()
+        }else{
+            checkCalc()
+        };
+        
         console.log("values cleared");
-
     };
 
 

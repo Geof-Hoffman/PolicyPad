@@ -36,6 +36,11 @@ build/Release
 node_modules/
 jspm_packages/
 
+#libs
+bootstrap.js
+jquery-3.1.0.min.js
+
+
 # TypeScript v1 declaration files
 typings/
 
@@ -88,5 +93,3 @@ typings/
 # Electron-Forge
 out/
 
-bootstrap.js
-jquery-3.1.0.min.js
