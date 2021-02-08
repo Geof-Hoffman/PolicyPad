@@ -3,28 +3,23 @@
 
 <head>
   <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
-  <script src="../jquery-3.1.0.min.js"></script>
-  <link rel="stylesheet" href="index.css">
-  <script  src="./popup.js"></script>
+  <script src="../lib/jquery-3.1.0.min.js"></script>
+  <link rel="stylesheet" href="../css/index.css">
+  <script  src="../js/popup.js"></script>
 <script>if (window.module) module = window.module;</script> 
+<script src="../js/sendScript.js"> </script>
   <title>Policy Pad</title>
 
 </head>
 
 <body>
-  <div class="etabs-tabgroup">
-    <div class="etabs-tabs"></div>
-    <div class="etabs-buttons"></div>
-</div>
-<div class="etabs-views"></div>
-
-  <div id="myDIV" class="header">
+   <div id="myDIV" class="header">
     <h2 style="margin:5px">PolicyPad</h2>
     <div>
       <input type="text" id="fileNum" class="file" placeHolder="File Number...">
       <input type="button" id="issue" class="fileAction" value="I">
       <input type="button" id="problem" class="fileAction" value="P">
-      <!--  <input type= "button" id="popout" class="topBtn" value="Pop-Out">-->
+      <!--  <input type= "button" id="problemWindow" class="topBtn" value="Pop-Out">-->
     </div>
     <div class="selectState">
       <select id="stateName" data-toggle="tooltip" title="Select state to begin">
@@ -97,9 +92,10 @@
 
 
   </div>
+  <div id='current'></div>
   <!--<div id="hidden" class="copy"><input value="I'm hiding"> </div>-->
-  
+ 
 
 </body>
-
+|
 </html>

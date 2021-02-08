@@ -1,9 +1,10 @@
+
 $(function () {
     //global variable declarations
     var stateName;
     var stateArray = [];
     var reviewList = [];
-    var finished = [];
+    var finishedList = [];
     var split = 0;
     var list = document.getElementById('myUL');
     var myNodelist = document.getElementsByTagName('LI');
@@ -12,8 +13,6 @@ $(function () {
     function storedData() {
         stored.stateName = localStorage.getItem('stateName');
         stateName = stored.stateName;
-        updateState(stateName);
-        console.log(stateName);
         stored.filesList = localStorage.getItem('filesList');
         stored.fileNum = localStorage.getItem('fileNum');
         stored.address = localStorage.getItem('address');
@@ -34,6 +33,7 @@ $(function () {
         stored.stateName = localStorage.getItem('stateName');
         stored.date = localStorage.getItem('date');
         stored.checkNum = localStorage.getItem('checkNum');
+        stored.finished = localStorage.getItem('finished');
         console.log(stored);
 
         // var workingFile = stored.filesList[0];
@@ -472,8 +472,48 @@ $(function () {
     });
 
     */
-    $('#fileNum').keyup(function () {
+$('#issue').on('click', function () {
+    var fileNumber = $('#fileNum').val();
+   console.log(fileNumber);
+ if(fileNumber >=0){
+    var files = localStorage.getItem('filesList');
+    var filesList = files.split(',');
+    console.log(filesList);
+    $('#fileNum').val(filesList[0]).val();
+
+}else{   /// >=0 is false if file number is in field
+  
+    var files = localStorage.getItem('filesList');
+    var filesList = files.split(',');
+      var currentList = filesList;
+      if (fileNumber == currentList[0]){
+        finishedList.push(fileNumber);
+        console.log(finishedList);
+       localStorage.setItem('finished', finishedList);
+        $('#fileNum').val('').val();
+      } 
+      //console.log(data.finished);
+     /* if(data.finished){
+      var finishedList =data.finished;    
+      console.log(finishedList); 
+      }else{
+       var finishedList =[];
+       console.log("no finished files stored yet")
+      };*/
+      var issuedFile = currentList.shift();
+      console.log(issuedFile);
+      finishedList.push(issuedFile);
+      console.log(finishedList);
+     localStorage.setItem('filesList', currentList);
+     localStorage.setItem('finished', finishedList);
+      $('#fileNum').val(currentList[0]).val();
+      //stateSelector(currentList[0]);    
+   
+  };});
+
+    $('#fileNum').on('change', function () {
         var fileNum = $(this).val();
+        console.log(fileNum)
         localStorage.setItem('fileNum', fileNum);
     });
     $('#stateName').change(function () {
@@ -523,9 +563,7 @@ $(function () {
     $('#checkNum').on('change mouseup mousedown mouseout keydown', function () {
         var checkNum = $(this).val();
         localStorage.setItem('checkNum', checkNum);
-        var test = localStorage.getItem('checkNum');
-        console.log(test);
-    });
+       });
     $('#optEndOne').keyup(function () {
         var optEndOne = $(this).val();
         localStorage.setItem('optEndOne', optEndOne);
@@ -660,7 +698,11 @@ $(function () {
             myNodelist[i].appendChild(span);
         }
         //console.log(stateArray);
-        $('#split').text(`UW: ${stateArray ? stateArray.UW : ''} \n split: ${stateArray ? stateArray.split : ''}\n CPL: ${stateArray ? stateArray.cpl : ''} \nRider:${stateArray ? stateArray.pud : ''}`);
+        $('#split').text(`UW:${stateArray ? stateArray.UW : ''} 
+split:${stateArray ? stateArray.split : ''} 
+CPL:${stateArray ? stateArray.cpl :''} 
+Rider:${stateArray ? stateArray.pud : ''}`
+        );
 
         var lps = (stateArray) ? data[data.findIndex(data => data.state === stateName)].lps : [];
         //console.log(LPS);
