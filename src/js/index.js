@@ -47,8 +47,51 @@ const createCurrentFilesWindow = () => {
   //garbage collection
   currentFileWindow.on('closed',()=> currentFileWindow=null);  
 };
-
-
+const createProblemFilesWindow = () => {
+  currentFileWindow = new BrowserWindow({
+    width: 400,
+    height: 400,
+    show: true,
+    webPreferences:{
+      nodeIntegration: true,
+    },
+    title:'Problem files'
+  });
+  currentFileWindow.loadFile(path.join(__dirname, '../html/problemFile.html'));
+  currentFileWindow.webContents.openDevTools();
+  //garbage collection
+  currentFileWindow.on('closed',()=> currentFileWindow=null);  
+};
+const createAddProblemWindow = () => {
+  currentFileWindow = new BrowserWindow({
+    width: 200,
+    height: 300,
+    show: true,
+    webPreferences:{
+      nodeIntegration: true,
+    },
+    title:'Problem files'
+  });
+  currentFileWindow.loadFile(path.join(__dirname, '../html/addProblem.html'));
+  currentFileWindow.webContents.openDevTools();
+  //garbage collection
+  currentFileWindow.on('closed',()=> currentFileWindow=null);  
+};
+const createEditBtnsWindow = () => {
+  currentFileWindow = new BrowserWindow({
+    width: 400,
+    height: 400,
+    show: true,
+    webPreferences:{
+      nodeIntegration: true,
+    },
+    title:'enter button info to add to main screen'
+  });
+  currentFileWindow.loadFile(path.join(__dirname, '../html/editBtns.html'));
+  currentFileWindow.webContents.openDevTools();
+  //garbage collection
+  currentFileWindow.on('closed',()=> currentFileWindow=null);  
+};
 
 
 
@@ -74,6 +117,17 @@ app.on('activate', () => {
   }
 });
 
+ipcMain.on('openAdd:send', (event, arg) => {
+  // Displays the object sent from the renderer process:
+  //{
+  //    message: "Hi",
+  //    someData: "Let's go"
+  //}
+  console.log(
+      arg  );
+});
+
+
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
 
@@ -89,7 +143,10 @@ const mainMenuTemplate = [
         }
       },
       {
-        label: 'View Problem Files list'
+        label: 'View Problem Files list',
+        click(){
+          createProblemFilesWindow();
+        }
       },
       {
         label:'Quit',
@@ -103,7 +160,13 @@ const mainMenuTemplate = [
   {
     label: '&Edit',
     submenu: [
-      {label:'edit state data'}
+      {label:'edit state data'},
+      {
+        label:'Edit Copy Buttons',
+        click(){
+          createEditBtnsWindow();
+        }
+      }
     ]
   },
   {
