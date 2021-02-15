@@ -2,12 +2,12 @@
 <html>
 
 <head>
-  <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+  <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
   <script src="../lib/jquery-3.1.0.min.js"></script>
   <link rel="stylesheet" href="../css/index.css">
-  <script  src="../js/popup.js"></script>
-<script>if (window.module) module = window.module;</script> 
-<script src="../js/sendScript.js"> </script>
+
+  <script>if (window.module) module = window.module;</script>
+  <script src="../js/sendScript.js"> </script>
   <title>Policy Pad</title>
 
 </head>
@@ -35,11 +35,12 @@
     <div><input id="loanAmount" type="text" data-toggle="tooltip" title="Enter Loan Amount from FLI"
         placeholder="loan Amount..."></div>
     <div data-toggle="tooltip" title="Select Type from FLI" class="select">
-      <select id="type">
+     <datalist id="types">
         <option value="CONV">CONV</option>
         <option value="VA">VA</option>
         <option value="FHA">FHA</option>
-      </select>
+      </datalist>
+      <input list="types" placeholder='Select loan Type' name="types" id="types">
     </div>
     <div><input id="date" type="date" data-toggle="tooltip" title="Enter date from FLI"
         placeholder="Mortgage Date..."><span id="copyDate" class="addBtn">Copy</span> </div>
@@ -77,25 +78,14 @@
   </div>
 
   <ul id="myUL"></ul>
-  <ul id="anotherUL"></ul>
-
-  <button data-val="Melanie S. Johnson">Melanie</button>
-
-  <button
-    data-val="Said deed of trust is secondary and subordinate to the lien of the insured deed of trust set forth under Schedule A hereof.">Sub</button>
-  <button data-val="tran"> tran</button>
-  <button data-val="ctic">ctic</button>
-  <button id="lps" data-toggle="tooltip" title="" data-val="LOAN POLICY SET">LOAN POLICY SET</button>
-  <button data-toggle="tooltip" title="" id="ups" data-val="UW SET">UW SET</button>
-  <button data-val="PI-StarterRepositoryShipments@propertyinsight.biz">FNF Policy Email</button>
-  <button id='jacket' data-toggle="tooltip" title="">Jacket</button>
-
+  <div id="buttonsDiv"></div>
 
   </div>
   <div id='current'></div>
   <!--<div id="hidden" class="copy"><input value="I'm hiding"> </div>-->
- 
 
+  <script src="../js/popup.js"></script>
 </body>
 |
+
 </html>

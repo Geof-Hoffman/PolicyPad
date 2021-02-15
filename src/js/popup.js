@@ -1,21 +1,68 @@
-var copyVal = "this is what was copied";
+var fileNumVal = (localStorage.fileNum) ? localStorage.fileNum : '';
+var stateNameVal = (localStorage.stateName)? localStorage.stateName:'';
+var myInputVal = (localStorage.myInput)?localStorage.myInput:'';
+var vestingVal = (localStorage.vesting)?localStorage.vesting:'';
+var addressVal = (localStorage.address)?localStorage.address:'';
+var loanAmtVal = (localStorage.loanAmount)?localStorage.loanAmount:'';
+var loanTypeVal = (localStorage.type)?localStorage.type:'';
+var loanDateVal = (localStorage.date)?localStorage.date:'';
+var optEndOneVal = (localStorage.optEndOne)?localStorage.optEndOne:'';
+var optEndTwoVal = (localStorage.optEndTwo)?localStorage.optEndTwo:'';
+var optEndThreeVal = (localStorage.optEndThree)?localStorage.optEndThree:'';
+var premiumVal = (localStorage.premium)?localStorage.premium:'';
+let uwCheckVal;
+var checkNumVal = (localStorage.checkNum)?localStorage.checkNum:'';
+var costOneVal = (localStorage.costOne)?localStorage.costOne:'';
+var costTwoVal = (localStorage.costTwo)?localStorage.costTwo:'';
+var costThreeVal = (localStorage.costThree)?localStorage.costThree:'';
+var costFourVal = (localStorage.costFour)?localStorage.costFour:'';
+var costFiveVal = (localStorage.costFive)?localStorage.costFive:'';
 
-const myNotification = new Notification('', {
-    body: `\"${copyVal}\" copied to clipboard`
-})
+var fileNumField = document.getElementById('fileNum');
+var stateNameField = document.getElementById('stateName');
+var myInputField = document.getElementById('myInput');
+var addressField = document.getElementById('address');
+var vestingField = document.getElementById('vesting');
+var loanAmountField = document.getElementById('loanAmount');
+var loanTypeField = document.getElementById('types');
+var loanDateField = document.getElementById('date');
+var optEndOneField = document.getElementById('optEndOne');
+var optEndTwoField = document.getElementById('optEndTwo');
+var optEndThreeField = document.getElementById('optEndThree');
+var premiumField = document.getElementById('premium');
+var uwCheckField = document.getElementById('UWsplit');
+var checkNumField = document.getElementById('checkNum');
+var costOneField = document.getElementById('costOne');
+var costTwoField = document.getElementById('costTwo');
+var costThreeField = document.getElementById('costThree');
+var costFourField = document.getElementById('costFour');
+var costFiveField = document.getElementById('costFive');
 
-myNotification.onclick = () => {
-    console.log('Notification clicked')
-}
 
-//global variable declarations
-var stateName;
-var stateArray = [];
-var reviewList = [];
-var finishedList = [];
-var split = 0;
+fileNumField.value = fileNumVal;
+myInputField.value = myInputVal;
+addressField.value = addressVal;
+vestingField.value = vestingVal;
+loanAmountField.value = loanAmtVal;
+loanTypeField.value = loanTypeVal;
+loanDateField.value = loanDateVal;
+optEndOneField.value = optEndOneVal
+optEndTwoField.value = optEndTwoVal;
+optEndThreeField.value = optEndThreeVal;
+premiumField.value = premiumVal;
+uwCheckField.value = '';
+checkNumField.value = checkNumVal;
+costOneField.value = costOneVal;
+costTwoField.value = costTwoVal;
+costThreeField.value = costThreeVal;
+costFourField.value = costFourVal;
+costFiveField.value = costFiveVal;
+
+var btnList = (localStorage.getItem('buttonList')) ? JSON.parse(localStorage.getItem('buttonList')) : '';
+var checkList = (localStorage.getItem('checkList')) ? localStorage.getItem('checkList') : '';
 var myNodelist = document.getElementsByTagName('LI');
-
+var split = 0;
+var list = document.getElementById('myUL');
 var data = [{
     id: 'VA',
     state: 'Virginia',
@@ -396,296 +443,167 @@ var data = [{
 
 
 ];
-function find(array, criteriaFn) {
-    let current = array
-    let next = []
-    while (current || current === 0) {
-        if (criteriaFn(current)) {
-            return current
-        }
-        if (Array.isArray(current)) {
-            for (let i = 0; i < current.length; i++) {
-                next.push(current[i])
-            }
-        }
-        current = next.shift()
+var buttons = [{
+    btn: "Melanie",
+    txt: "Melanie S. Johnson",
+    tip: "",
+
+},
+{
+    btn: "sub",
+    txt: "Said deed of trust is secondary and subordinate to the lien of the insured deed of trust set forth under Schedule A hereof.",
+    tip: "Subordination Language"
+},
+{
+    btn: "tran",
+    txt: "tran",
+    tip: "searching or trans... doc"
+},
+{
+    btn: "ctic",
+    txt: "ctic",
+    tip: "searching or CTIC notice... doc",
+
+},
+{
+    btn: "LPS",
+    txt: "LOAN POLICY SET",
+    tip: ""
+},
+{
+    btn: "UW SET",
+    txt: "UW SET",
+    tip: ""
+},
+{
+    btn: "FNF Policy Email",
+    txt: "PI-StarterRepositoryShipments@propertyinsight.biz",
+    tip: "",
+
+},
+{
+    btn: "jacket",
+    txt: "Said deed of trust is secondary and subordinate to the lien of the insured deed of trust set forth under Schedule A hereof.",
+    tip: "Subordination Language"
+}];
+var stored = {}; 
+//input change event handlers
+document.addEventListener('change', (e) => {
+    if (e.target == stateNameField) {
+        stateNameVal = e.target.value;
+        console.log(stateNameVal);
+        updateState(stateNameVal);
     }
-    return null;
-}
+    if (e.target == loanTypeField) {
+        loanTypeVal = e.target.value;
+        console.log(e.target);
+        localStorage.setItem('type', loanTypeVal);
+    }
+});
+//input event handlers
+document.addEventListener('input', (e) => {
+    if (e.target == fileNumField) {
+        fileNumVal = e.target.value;
+        localStorage.setItem('fileNum', fileNumVal);
+    }
+    if (e.target == myInputField) {
+        myInputVal = e.target.value;
+        console.log(myInputVal);
+        localStorage.setItem('myInput', myInputVal);
+    }
+    if (e.target == addressField) {
+        addressVal = e.target.value;
+        localStorage.setItem('address', addressVal);
+    }
+    if (e.target == vestingField) {
+        vestingVal = e.target.value;
+        localStorage.setItem('vesting', vestingVal);
+    }
+    if (e.target == loanAmountField) {
+        loanAmountVal = e.target.value;
+        localStorage.setItem('loanAmount', loanAmountVal);
+    }
 
-$(function () {
-
-    function displayStates() {
-        var output = '<option value=""><strong>choose state</strong></option>';
-
-        for (var i = 0; i < data.length; i++) {
-            output += '<option>' + data[i].state + '</option>';
-        }
-
-        document.getElementById('stateName').innerHTML = output;
-    };
-    function displayList() {
-        var list = document.getElementById('myUL');
-        list.addEventListener('click', function (ev) {
-            if (ev.target.tagName === 'LI') {
-                ev.target.classList.toggle('checked');
-            }
-        },
-            false);
-        var i;
-        var myNodelist = document.getElementsByTagName('LI');
-        for (i = 0; i < myNodelist.length; i++) {
-            var span = document.createElement('SPAN');
-            var txt = document.createTextNode('\u00D7');
-            span.className = 'close';
-            span.appendChild(txt);
-            myNodelist[i].appendChild(span);
-        }
-    };
-    //import input values from storage on open
-    function getStoredData() {
-        var stored = {};
-        stored.stateName = localStorage.getItem('stateName');
-        stateName = stored.stateName;
-        stored.filesList = localStorage.getItem('filesList');
-        stored.fileNum = localStorage.getItem('fileNum');
-        stored.address = localStorage.getItem('address');
-        stored.vesting = localStorage.getItem('vesting');
-        stored.loanAmount = localStorage.getItem('loanAmount');
-        stored.type = localStorage.getItem('type');
-        stored.date = localStorage.getItem('date');
-        stored.optEndOne = localStorage.getItem('optEndOne');
-        stored.optEndTwo = localStorage.getItem('optEndTwo');
-        stored.optEndThree = localStorage.getItem('optEndThree');
-        stored.premium = localStorage.getItem('premium');
-        stored.costOne = localStorage.getItem('costOne');
-        stored.costTwo = localStorage.getItem('costTwo')
-        stored.costThree = localStorage.getItem('costThree');
-        stored.costFour = localStorage.getItem('costFour');
-        stored.costFive = localStorage.getItem('costFive')
-        stored.optEndTwo = localStorage.getItem('optEndTwo');
-        stored.stateName = localStorage.getItem('stateName');
-        stored.date = localStorage.getItem('date');
-        stored.checkNum = localStorage.getItem('checkNum');
-        stored.finished = localStorage.getItem('finished');
-        console.log(stored);
-
-        // var workingFile = stored.filesList[0];
-        $('#stateName').val(stored.stateName).val();
-        $('#fileNum').val(stored.fileNum).val();
-        $('#checkNum').val(stored.checkNum).val();
-        $('#address').val(stored.address).val();
-        $('#vesting').val(stored.vesting).val();
-        $('#loanAmount').val(stored.loanAmount).val();
-        $('#type').val(stored.type).val();
-        $('#optEndOne').val(stored.optEndOne).val();
-        $('#optEndTwo').val(stored.optEndTwo).val();
-        $('#optEndThree').val(stored.optEndThree).val();
-        $('#premium').val(stored.premium).val();
-        $('#costOne').val(stored.costOne).val();
-        $('#costTwo').val(stored.costTwo).val();
-        $('#costThree').val(stored.costThree).val();
-        $('#costFour').val(stored.costFour).val();
-        $('#costFive').val(stored.costFive).val();
-        $('#date').val(stored.date).val();
-
-    };
-    function updateState(stateName) {
-        $('#stateName').val(stateName).val();
-        var list = document.getElementById('myUL');
-        list.innerHTML = '';  //clears list
-        localStorage.setItem('stateName', stateName);
-        stateArray = find(data, index => index.state === stateName);
-        //console.log(stateArray);
-        //updates variable stateArray to the new state
-
-        reviewList = (stateArray) ? stateArray.review : [];//sets value of review list to new state
-        //console.log(reviewList);
-        //display is a bolean that is used to determine if the endorsment cost inputs should be displayed/
-        display = (stateArray) ? stateArray.end : '';
-        split = (stateArray) ? stateArray.split / 100 : 0;
-
-        $('#bar').toggle(display);
-        for (var i = 0; i < reviewList.length; i++) {   //adds review items to list
-            // Create DOM element
-            var li = document.createElement('li');
-            // Set text of element
-            li.textContent = reviewList[i];
-            // Append this element to its parent
-            list.appendChild(li);
-        } //adds close box
-        for (var i = 0; i < myNodelist.length; i++) {
-            var span = document.createElement('SPAN');
-            var txt = document.createTextNode('\u00D7');
-            span.className = 'close';
-            span.appendChild(txt);
-            myNodelist[i].appendChild(span);
-        }
-        //console.log(stateArray);
-        $('#split').text(`UW:${stateArray ? stateArray.UW : ''} 
-split:${stateArray ? stateArray.split : ''} 
-CPL:${stateArray ? stateArray.cpl : ''} 
-Rider:${stateArray ? stateArray.pud : ''}`
-        );
-
-        var lps = (stateArray) ? data[data.findIndex(data => data.state === stateName)].lps : [];
-        //console.log(LPS);
-        $("#lps").attr("title", lps);
-        var ups = (stateArray) ? data[data.findIndex(data => data.state === stateName)].ups : [];;
-        var jacket = (stateArray) ? data[data.findIndex(data => data.state === stateName)].jacket : '';
-        //console.log(jacket);
-        $("#ups").attr("title", ups);
-        $("#jacket").attr("title", jacket);
-    };
-    function checkCalc() {
-        //captures numbers from inputs 
-        var premium = parseFloat($('#premium').val());
-        if (isNaN(premium)) {
-            premium = 0;
-        }
-        var costOne = parseFloat($('#costOne').val());
-        if (isNaN(costOne)) {
-            costOne = 0;
-        }
-        var costTwo = parseFloat($('#costTwo').val());
-        if (isNaN(costTwo)) {
-            costTwo = 0;
-        }
-        var costThree = parseFloat($('#costThree').val());
-        if (isNaN(costThree)) {
-            costThree = 0;
-        }
-        var costFour = parseFloat($('#costFour').val());
-        if (isNaN(costFour)) {
-            costFour = 0;
-        }
-        var costFive = parseFloat($('#costFive').val());
-        if (isNaN(costFive)) {
-            costFive = 0;
-        }
-        var total = parseFloat(premium) + parseFloat(costOne) + parseFloat(costTwo) + parseFloat(costThree) + parseFloat(costFour) + parseFloat(costFive);
-        var totalFixed = total * split;
-        var UWcheck = totalFixed.toFixed(2);
-        $('#UWsplit').val(UWcheck).val();
-    };
-    function newElement() {
-        var li = document.createElement('li');
-        var inputValue = document.getElementById('myInput').value;
-        var t = document.createTextNode(inputValue);
-        li.prepend(t);
-        if (inputValue === '') {
-            alert('add curative items');
-        } else {
-            document.getElementById('myUL').prepend(li);
-        }
-        document.getElementById('myInput').value = '';
-
-        var span = document.createElement('SPAN');
-        var txt = document.createTextNode('\u00D7');
-        span.className = 'close';
-        span.prepend(txt);
-        li.prepend(span);
-
-        for (i = 0; i < close.length; i++) {
-            close[i].onclick = function () {
-                var div = this.parentElement;
-                div.style.display = 'none';
-            }
-        }
-    };
-    function hideItem() {
-        var close = document.getElementsByClassName('close');
-        var i;
-        for (i = 0; i < close.length; i++) {
-            close[i].onclick = function () {
-                var div = this.parentElement;
-                div.style.display = 'none';
-            }
-        }
-    };
-    function clear() {
-
-        localStorage.setItem('fileNum', '');
-        localStorage.setItem('address', '');
-        localStorage.setItem('vesting', '');
-        localStorage.setItem('loanAmount', '');
-        localStorage.setItem('type', '');
-        localStorage.setItem('date', '');
-        localStorage.setItem('optEndOne', '');
-        localStorage.setItem('optEndTwo', '');
-        localStorage.setItem('optEndThree', '');
-        localStorage.setItem('premium', '');
-        localStorage.setItem('costOne', '');
-        localStorage.setItem('costTwo', '')
-        localStorage.setItem('costThree', '');
-        localStorage.setItem('costFour', '');
-        localStorage.setItem('costFive', '')
-        localStorage.setItem('stateName', '');
-        localStorage.setItem('date', '');
-        localStorage.setItem('checkNum', '');
-
-
-        $('#fileNum').val('').val();
-        $('#address').val('').val();
-        $('#vesting').val('').val();
-        $('#loanAmount').val('').val();
-        $('#type').val('').val();
-        $('#date').val('').val();
-        $('#optEndOne').val('').val();
-        $('#optEndTwo').val('').val();
-        $('#optEndThree').val('').val();
-        $('#premium').val('').val();
-        $('#costOne').val('').val();
-        $('#costTwo').val('').val();
-        $('#costThree').val('').val();
-        $('#costFour').val('').val();
-        $('#costFive').val('').val();
-        $('#date').val('').val();
-        $('#checkNum').val('').val();
-        updateState(stateName);
-        if (stateArray.end != false) {
-            $('#bar').toggle(display)
-            checkCalc()
-        } else {
-            checkCalc()
-        };
-
-        console.log("values cleared");
-    };
-
-    //************event handlers */
-    $('#premium').on('change mouseup mousedown mouseout keydown', function () {
-        checkCalc()
-        var premium = $(this).val();
-        localStorage.setItem('premium', premium);
-    });
-    $('#costOne').keyup(function () {
+    if (e.target == loanDateField) {
+        loanDateVal = e.target.value;
+        console.log(loanDateVal);
+        localStorage.setItem('date', loanDateVal);
+    }
+    if (e.target == optEndOneField) {
+        optEndOneVal = e.target.value;
+        localStorage.setItem('optEndOne', optEndOneVal);
+    }
+    if (e.target == optEndTwoField) {
+        optEndTwoVal = e.target.value;
+        localStorage.setItem('optEndTwo', optEndTwoVal);
+    }
+    if (e.target == optEndThreeField) {
+        optEndThreeVal = e.target.value;
+        localStorage.setItem('optEndThree', optEndThreeVal);
+    }
+    if (e.target == premiumField) {
+        premiumVal = e.target.value;
+        localStorage.setItem('premium', premiumVal);
         checkCalc();
-        var costOne = $(this).val();
-        localStorage.setItem('costOne', costOne);
-    });
-    $('#costTwo').keyup(function () {
-        checkCalc()
-        var costTwo = $(this).val();
-        localStorage.setItem('costTwo', costTwo);
-    });
-    $('#costThree').keyup(function () {
-        checkCalc()
-        var costThree = $(this).val();
-        localStorage.setItem('costThree', costThree);
-    });
-    $('#costFour').keyup(function () {
+    }
+    if (e.target == uwCheckField) {
+        uwCheckVal = e.target.value;
+        console.log(uwCheckVal);
+    }
+    if (e.target == checkNumField) {
+        checkNumVal = e.target.value;
+        localStorage.setItem('checkNum', checkNumVal);
+    }
+    if (e.target == costOneField) {
+        costOneVal = e.target.value;
         checkCalc();
-        var costFour = $(this).val();
-        localStorage.setItem('costFour', costFour);
-    });
-    $('#costFive').keyup(function () {
+        localStorage.setItem('costOne', costOneVal);
+    }
+    if (e.target == costTwoField) {
+        costTwoVal = e.target.value;
+        checkCalc()
+        localStorage.setItem('costTwo', costTwoVal);
+    }
+    if (e.target == costThreeField) {
+        costThreeVal = e.target.value;
+        console.log(costThreeVal);
+        checkCalc()
+        localStorage.setItem('costThree', costThreeVal);
+    }
+    if (e.target == costFourField) {
+        costFourVal = e.target.value;
         checkCalc();
-        var costFive = $(this).val();
-        localStorage.setItem('costFive', costFive);
-    });
+        localStorage.setItem('costFour', costFourVal);
+    }
+    if (e.target == costFiveField) {
+        costFiveVal = e.target.value;
+        checkCalc();
+        localStorage.setItem('costFive', costFiveVal);
+    }
+});
+//click event handlers
+document.addEventListener('click', function (ev) {
+    if (ev.target.tagName === 'SPAN') {
+        // hideItem(ev.target);
+        //  getStoredData();
+        // createButtonsFromStoredData();
+    }
+    if (ev.target.matches('button')) {
+        copyButtonDataValToClipBoard(ev)
 
-    $('#issue').on('click', function () {
+    }
+    if (ev.target.id === ('add')) {
+        //sends input value to newElement function to be added to list; 
+        myInputVal = ev.target.value;
+        console.log(myInputVal);
+        newElement(localStorage.myInput);
+    }
+    if (ev.target.id === ('myUL')) {
+        hideItem()
+        console.log('list Item clicked')
+    }
+    if (ev.target.id === ('issue')) {
+        console.log('Issue button clicked')/*
         var fileNumber = $('#fileNum').val();
         console.log(fileNumber);
         if (fileNumber >= 0) {
@@ -693,9 +611,9 @@ Rider:${stateArray ? stateArray.pud : ''}`
             var filesList = files.split(',');
             console.log(filesList);
             $('#fileNum').val(filesList[0]).val();
-
+    
         } else {   /// >=0 is false if file number is in field
-
+    
             var files = localStorage.getItem('filesList');
             var filesList = files.split(',');
             var currentList = filesList;
@@ -712,7 +630,7 @@ Rider:${stateArray ? stateArray.pud : ''}`
              }else{
               var finishedList =[];
               console.log("no finished files stored yet")
-             };*/
+             };
             var issuedFile = currentList.shift();
             console.log(issuedFile);
             finishedList.push(issuedFile);
@@ -721,89 +639,302 @@ Rider:${stateArray ? stateArray.pud : ''}`
             localStorage.setItem('finished', finishedList);
             $('#fileNum').val(currentList[0]).val();
             //stateSelector(currentList[0]);    
-
-        };
-    });
-    $('#fileNum').on('change', function () {
-        var fileNum = $(this).val();
-        console.log(fileNum)
-        localStorage.setItem('fileNum', fileNum);
-    });
-    $('#stateName').change(function () {
-        //sets statename to input    
-        stateName = $(this).val();
-        updateState(stateName);
-    });
-    $('#clear').on('click', function () {
-        //sets all variables to ''
+    
+        };*/
+    }
+    if (ev.target.id === ('clear')) {
         clear();
         console.log('storage cleared')
-    });
-    $('#add').on('click', function () {
-
-        console.log('add clicked')
-        //sends input value to newElement function to be added to list; 
-        var e = $(this).val();
-        newElement(e);
-    });//enter key clicks add 
-    $('#myInput').keyup(function (event) {
-        if (event.keyCode === 13) {
-            $('#add').click();
-        }
-    });
-    $('#address').keyup(function () {
-        var address = $(this).val();
-        localStorage.setItem('address', address);
-    });
-    $('#vesting').keyup(function () {
-        var vesting = $(this).val();
-        localStorage.setItem('vesting', vesting);
-    });
-    $('#loanAmount').keyup(function () {
-        var loanAmount = $(this).val();
-        localStorage.setItem('loanAmount', loanAmount);
-    });
-    $('#type').on('change', function () {
-        var type = $(this).val()
-        //   alert(type);        
-        localStorage.setItem('type', type);
-        var oneMOretime = localStorage.getItem('type')
-        console.log(oneMOretime);
-    });
-    $('#date').on('change', function () {
-        var date = $(this).val();
-        localStorage.setItem('date', date);
-    });
-    $('#checkNum').on('change mouseup mousedown mouseout keydown', function () {
-        var checkNum = $(this).val();
-        localStorage.setItem('checkNum', checkNum);
-    });
-    $('#optEndOne').keyup(function () {
-        var optEndOne = $(this).val();
-        localStorage.setItem('optEndOne', optEndOne);
-    });
-    $('#optEndTwo').keyup(function () {
-        var optEndTwo = $(this).val();
-        localStorage.setItem('optEndTwo', optEndTwo);
-    });
-    $('#optEndThree').keyup(function () {
-        var optEndThree = $(this).val();
-        console.log(optEndThree);
-        localStorage.setItem('optEndThree', optEndThree);
-    });
-    //calls hide item to x delete list item
-    $('#myUL').on('click', () =>
-        hideItem()
-    );
-
-    //run on open
-
-    displayStates();
-    displayList();
-    getStoredData();
-    checkCalc();
-    updateState(stateName);
-    //newElement();
-    hideItem()
+    }
 
 });
+
+
+function find(array, criteriaFn) {
+    let current = array
+    let next = []
+    while (current || current === 0) {
+        if (criteriaFn(current)) {
+            return current
+        }
+        if (Array.isArray(current)) {
+            for (let i = 0; i < current.length; i++) {
+                next.push(current[i])
+            }
+        }
+        current = next.shift()
+    }
+    return null;
+}
+function displayStates() {
+    var stateOptionsOutput = '<option value=""><strong>choose state</strong></option>';
+    for (var i = 0; i < data.length; i++) {
+        stateOptionsOutput += '<option>' + data[i].state + '</option>';
+    }
+    document.getElementById('stateName').innerHTML = stateOptionsOutput;
+    if (localStorage.stateName) {
+        console.log(localStorage.stateName)
+        stateNameField.value = localStorage.stateName;
+    }
+
+}; displayStates();
+function displayList() {
+    var list = document.getElementById('myUL');
+    list.addEventListener('click', function (ev) {
+        if (ev.target.tagName === 'LI') {
+            ev.target.classList.toggle('checked');
+        }
+    },
+        false);
+    var i;
+    var myNodelist = document.getElementsByTagName('LI');
+    for (i = 0; i < myNodelist.length; i++) {
+        var span = document.createElement('SPAN');
+        var txt = document.createTextNode('\u00D7');
+        span.className = 'close';
+        span.appendChild(txt);
+        myNodelist[i].appendChild(span);
+    }
+};
+//old functions not sure if I'll use them
+/*
+function getStoredData() {
+    stored.filesList = localStorage.getItem('filesList');
+    addressVal = localStorage.getItem('address');
+    stored.vesting = localStorage.getItem('vesting');
+    stored.loanAmount = localStorage.getItem('loanAmount');
+    stored.type = localStorage.getItem('type');
+    stored.date = localStorage.getItem('date');
+    stored.optEndOne = localStorage.getItem('optEndOne');
+    stored.optEndTwo = localStorage.getItem('optEndTwo');
+    stored.optEndThree = localStorage.getItem('optEndThree');
+    stored.premium = localStorage.getItem('premium');
+    stored.costOne = localStorage.getItem('costOne');
+    stored.costTwo = localStorage.getItem('costTwo')
+    stored.costThree = localStorage.getItem('costThree');
+    stored.costFour = localStorage.getItem('costFour');
+    stored.costFive = localStorage.getItem('costFive')
+    stored.optEndTwo = localStorage.getItem('optEndTwo');
+    stored.date = localStorage.getItem('date');
+    stored.checkNum = localStorage.getItem('checkNum');
+    stored.finished = localStorage.getItem('finished');
+    stored.btnList = (localStorage.getItem('buttonList'));
+    // console.log(stored);
+};
+*/
+/*
+$('#stateName').val(stateName).val();
+$('#fileNum').val(stored.fileNum).val();
+$('#checkNum').val(stored.checkNum).val();
+$('#address').val(stored.address).val();
+$('#vesting').val(stored.vesting).val();
+$('#loanAmount').val(stored.loanAmount).val();
+$('#type').val(stored.type).val();
+$('#optEndOne').val(stored.optEndOne).val();
+$('#optEndTwo').val(stored.optEndTwo).val();
+$('#optEndThree').val(stored.optEndThree).val();
+$('#premium').val(stored.premium).val();
+$('#costOne').val(stored.costOne).val();
+$('#costTwo').val(stored.costTwo).val();
+$('#costThree').val(stored.costThree).val();
+$('#costFour').val(stored.costFour).val();
+$('#costFive').val(stored.costFive).val();
+$('#date').val(stored.date).val();
+*/
+function createButtonsFromStoredData() {
+    setFileNumDataVal();
+    var btnList = (localStorage.buttonList) ? JSON.parse(localStorage.buttonList) : buttons;
+    console.log(btnList);
+    var buttonsDiv = document.getElementById('buttonsDiv');
+    buttonsDiv.innerHTML = "";
+    for (var i = 0; i < btnList.length; i++) {   //adds review items to list        
+        // Create DOM element
+        var btn = document.createElement('button');
+        // Set text of element
+        //btn.value = buttons[i].btn;
+        btn.innerHTML = btnList[i].btn;
+        btn.setAttribute("data-val", btnList[i].txt);
+        btn.setAttribute("title", btnList[i].tip);
+        btn.setAttribute("class", "copyBtn")
+        btn.setAttribute("data-toggle", "tooltip")
+        // Append this element to its parent
+        buttonsDiv.appendChild(btn);
+    }
+
+}; 
+createButtonsFromStoredData();
+function setFileNumDataVal() {
+    /*
+ var FileNumBtnIndex = btnList.findIndex((data) => data.btn == "File#");
+ console.log(FileNumBtnIndex);
+ btnList[FileNumBtnIndex].txt = localStorage.getItem('fileNum');
+ var stringifyBtnList = JSON.stringify(btnList);
+ localStorage.setItem('buttonList', stringifyBtnList)
+ */
+};
+function makeList(stateArray) {
+    console.log('makeList called');
+    var tempList = [];
+    list.innerHTML = '';  //clears list     
+    var reviewList = (stateArray) ? stateArray.review : [];
+    console.log(reviewList);
+    for (var i = 0; i < reviewList.length; i++) {
+        tempList.unshift(reviewList[i])
+    }
+    tempList.forEach(listItem => newElement(listItem));
+};
+function newElement(listItem) {
+    var li = document.createElement('li');
+    var t = document.createTextNode(listItem);
+    var span = document.createElement('SPAN');
+    var txt = document.createTextNode('\u00D7');
+    //adds close class to x and adds it to list item
+    span.className = 'close';
+    //span.id = tempList.findIndex(()=> tempList === listItem) 
+    span.appendChild(txt);
+    li.prepend(t);
+    li.appendChild(span);
+    list.prepend(li);
+    myInputField.value = '';
+};
+function updateState(stateName) {
+    localStorage.setItem('stateName', stateName);
+    // $('#stateName').val(stateName).val();
+    stateArray = find(data, index => index.state === stateName);
+    makeList(stateArray);
+    $('#split').text(`UW:${stateArray ? stateArray.UW : ''} 
+    split:${stateArray ? stateArray.split : ''} 
+    CPL:${stateArray ? stateArray.cpl : ''} 
+    Rider:${stateArray ? stateArray.pud : ''}`
+    );
+
+    //  var lps = (stateArray) ? data[data.findIndex(data => data.state === stateName)].lps : [];
+    // console.log(LPS);
+    // $("#lps").attr("title", lps);
+    //var ups = (stateArray) ? data[data.findIndex(data => data.state === stateName)].ups : [];;
+    //var jacket = (stateArray) ? data[data.findIndex(data => data.state === stateName)].jacket : '';
+    //$("#ups").attr("title", ups);
+    //$("#jacket").attr("title", jacket);
+};updateState(stateNameVal);
+var close = document.getElementsByClassName('close');
+function hideItem() {
+    var i;
+    for (i = 0; i < close.length; i++) {
+        close[i].onclick = function () {
+            var div = this.parentElement;
+            div.style.display = 'none';
+        }
+    }
+};
+function checkCalc() {
+    //captures numbers from inputs 
+    var premium = parseFloat($('#premium').val());
+    if (isNaN(premium)) {
+        premium = 0;
+    }
+    var costOne = parseFloat($('#costOne').val());
+    if (isNaN(costOne)) {
+        costOne = 0;
+    }
+    var costTwo = parseFloat($('#costTwo').val());
+    if (isNaN(costTwo)) {
+        costTwo = 0;
+    }
+    var costThree = parseFloat($('#costThree').val());
+    if (isNaN(costThree)) {
+        costThree = 0;
+    }
+    var costFour = parseFloat($('#costFour').val());
+    if (isNaN(costFour)) {
+        costFour = 0;
+    }
+    var costFive = parseFloat($('#costFive').val());
+    if (isNaN(costFive)) {
+        costFive = 0;
+    }
+    var total = parseFloat(premium) + parseFloat(costOne) + parseFloat(costTwo) + parseFloat(costThree) + parseFloat(costFour) + parseFloat(costFive);
+    var totalFixed = total * split;
+    var UWcheck = totalFixed.toFixed(2);
+    $('#UWsplit').val(UWcheck).val();
+}; 
+checkCalc();
+function clear() {
+    localStorage.setItem('fileNum', '');
+    localStorage.setItem('address', '');
+    localStorage.setItem('vesting', '');
+    localStorage.setItem('loanAmount', '');
+    localStorage.setItem('type', '');
+    localStorage.setItem('date', '');
+    localStorage.setItem('optEndOne', '');
+    localStorage.setItem('optEndTwo', '');
+    localStorage.setItem('optEndThree', '');
+    localStorage.setItem('premium', '');
+    localStorage.setItem('costOne', '');
+    localStorage.setItem('costTwo', '')
+    localStorage.setItem('costThree', '');
+    localStorage.setItem('costFour', '');
+    localStorage.setItem('costFive', '')
+    localStorage.setItem('stateName', '');
+    localStorage.setItem('date', '');
+    localStorage.setItem('checkNum', '');
+    localStorage.setItem('myInput', '');
+    
+    location.reload();
+/*
+    $('#fileNum').val('').val();
+    $('#address').val('').val();
+    $('#vesting').val('').val();
+    $('#loanAmount').val('').val();
+    $('#type').val('').val();
+    $('#date').val('').val();
+    $('#optEndOne').val('').val();
+    $('#optEndTwo').val('').val();
+    $('#optEndThree').val('').val();
+    $('#premium').val('').val();
+    $('#costOne').val('').val();
+    $('#costTwo').val('').val();
+    $('#costThree').val('').val();
+    $('#costFour').val('').val();
+    $('#costFive').val('').val();
+    $('#date').val('').val();
+    $('#checkNum').val('').val();
+
+
+    if (stateArray.end != false) {
+        $('#bar').toggle(display)
+        checkCalc()
+    } else {
+        checkCalc()
+    };
+
+    console.log("values cleared");
+*/};
+function copyButtonDataValToClipBoard(ev) {
+    var data = ev.target.getAttribute('data-val');
+    var dummy = $('<input>').val(data).appendTo('body').select();
+    document.execCommand('copy');
+    copyNotification(data);
+    dummy.remove();
+};
+function copyNotification(data) {
+    const myNotification = new Notification('', {
+        body: `\"${data}\" copied to clipboard`
+    })
+    myNotification.onclick = () => {
+        console.log('Notification clicked')
+    }
+};
+$('#myInput').keyup(function (event) {
+    if (event.keyCode === 13) {
+        $('#add').click();
+    }
+});
+
+
+
+
+
+
+
+
+

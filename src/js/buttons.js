@@ -1,134 +1,171 @@
-const electron = require('electron');
-
-
-var buttons =[  {
-    btn: "first",
-    txt: "first text",
-    tip: "first hover",
+var buttons = [{
+    btn: "Melanie",
+    txt: "Melanie S. Johnson",
+    tip: "",
 
 },
 {
-    btn: "second",
-    txt: "second text",
-    tip: "second hover"
+    btn: "sub",
+    txt: "Said deed of trust is secondary and subordinate to the lien of the insured deed of trust set forth under Schedule A hereof.",
+    tip: "Subordination Language"
 },
 {
-    btn: "third",
-    txt: "third text",
-    tip: "third hover"
-}]
+    btn: "tran",
+    txt: "tran",
+    tip: "searching or trans... doc"
+},
+{
+    btn: "ctic",
+    txt: "ctic",
+    tip: "searching or CTIC notice... doc",
+
+},
+{
+    btn: "LPS",
+    txt: "LOAN POLICY SET",
+    tip: ""
+},
+{
+    btn: "UW SET",
+    txt: "UW SET",
+    tip: ""
+},
+{
+    btn: "FNF Policy Email",
+    txt: "PI-StarterRepositoryShipments@propertyinsight.biz",
+    tip: "",
+
+},
+{
+    btn: "jacket",
+    txt: "Said deed of trust is secondary and subordinate to the lien of the insured deed of trust set forth under Schedule A hereof.",
+    tip: "Subordination Language"
+}];
 var btnList;
+var tempList = [];
+//elements 
 var myNodelist = document.getElementsByTagName('LI');
 var list = document.getElementById('myUL');
-list.addEventListener('click', function (ev) {
-    if (ev.target.tagName === 'LI') {
-        console.log('clicked')
-       
+var btnDisplay = document.getElementById('btnDisplay');
+var btnText = document.getElementById('btnText');
+var btnTip = document.getElementById('btnTip');
+
+function getStoredData() {
+    console.log('getStoredData() called');
+    var stored = {};
+    var testForButtonList = (localStorage.getItem('buttonList')) ? JSON.parse(localStorage.getItem('buttonList')) : buttons;
+    stored.buttonList = testForButtonList;
+    btnList = stored.buttonList;
+    console.log(btnList)
+    displayList();
+    }; getStoredData();    
+
+function displayList() {
+    tempList =[];
+    console.log('displayList() called');
+    list.innerHTML = '';
+    for (var i = 0; i < btnList.length; i++) {       
+        tempList.unshift(btnList[i].btn)
     }
-},
-    false);
-var i;
-var myNodelist = document.getElementsByTagName('LI');
-for (i = 0; i < myNodelist.length; i++) {
+    tempList.forEach(element => newElement(element));
+    console.log(tempList);
+}; 
+function addButtontoLocalStorage() {
+    console.log('addButtontoLocalStorage() called');
+    var storedButtons = btnList;
+    var newButtonObj = {};
+    newButtonObj.btn = btnDisplay.value;
+    newButtonObj.txt = btnText.value;
+    newButtonObj.tip = btnTip.value;
+    btnDisplay.value = '';
+    btnText.value = '';
+    btnTip.value = '';
+    storedButtons.push(newButtonObj);
+    var StringifyStoredButtons = JSON.stringify(storedButtons);
+    localStorage.setItem('buttonList', StringifyStoredButtons); 
+};
+function newElement(inputValue) {
+    console.log(`newElement(${inputValue}) called`);
+    var li = document.createElement('li');
+    var t = document.createTextNode(inputValue);   
     var span = document.createElement('SPAN');
     var txt = document.createTextNode('\u00D7');
-    span.className = 'close';
+    //adds close class to x and adds it to list item
+    span.className = 'close';   
+    span.id = btnList.findIndex((btnList)=> btnList.btn === inputValue) 
     span.appendChild(txt);
-    myNodelist[i].appendChild(span);
+    li.prepend(t);
+    li.appendChild(span);
+    list.prepend(li);      
 };
-function getStoredData() {
-    var stored = {};
-    stored.buttonList = localStorage.getItem('buttonList');
-    if(!(stored.buttonList) ){
-        console.log('neg')
-        btnList = buttons;
-    } else{
-        btnList = stored.buttonList;
-        console.log('positive')
-    };  
-   
+var close = document.getElementsByClassName('close');
+function hideItem(ev) {
+    console.log('hideItem(ev) called');
+   var indexToRemove = ev.id;
+   console.log(btnList);
+   btnList.splice(indexToRemove, 1);
+   var StringifyStoredButtons = JSON.stringify(btnList);
+   localStorage.setItem('buttonList', StringifyStoredButtons); 
+    
 };
-getStoredData();
-function displayList(){
-    for (var i = 0; i < btnList.length; i++) {   //adds review items to list
-        createListItem(i);
-    };
-};
-displayList();
-function createListItem(i){// Create DOM element
-    var li = document.createElement('li');
-    // Set text of element
-    li.textContent =  btnList[i].btn;
-    li.className = 'close';
-    // Append this element to its parent
-    list.appendChild(li);
-}; 
+
+
+function clear() {
     
 
-function newElement() {
-    var li = document.createElement('li');
-    var inputValue = document.getElementById('btnDisplay').value;
-    var t = document.createTextNode(inputValue);
-    li.prepend(t);
-    if (inputValue === '') {
-        alert('add curative items');
-    } else {
-        document.getElementById('myUL').prepend(li);
-    }
-    document.getElementById('btnDisplay').value = '';
+    // localStorage.setItem('fileNum', ''); 
+
+    // $('#fileNum').val('').val();
 
 };
 
-function hideItem() {
-    var close = document.getElementsByClassName('close');
-    var i;
-    for (i = 0; i < close.length; i++) {
-        close[i].onclick = function () {
-            var div = this.parentElement;
-            div.style.display = 'none';
-        }
-    localStorage.getItem('btnList')
-    }
-};
-$('#myUL').on('click', () =>
-    hideItem()
-);
-function clear() {
-
-   // localStorage.setItem('fileNum', ''); 
-
-   // $('#fileNum').val('').val();
-   
-};
-$('#add').on('click', function () {
-   var e = $(this).val();
-    newElement(e);
-});
-
-for (var i = 0; i < buttons.length; i++) {   //adds review items to list
+function createButtonsFromStoredData() {
     var buttonsDiv = document.getElementById('buttonsDiv');
-    // Create DOM element
-    var btn = document.createElement('button');
-    // Set text of element
-    btn.value =  buttons[i].btn;
-    btn.innerHTML = buttons[i].btn;
-    btn.setAttribute("data-val", buttons[i].btn);
-    btn.setAttribute("class", "copyBtn")
-    // Append this element to its parent
-    buttonsDiv.appendChild(btn);
-} 
-$('button').on('click', function () {
-    var value = $(this).val();
-    var data = $(this).data('val');
-    var dummy = $('<input>').val(data).appendTo('body').select();
-    document.execCommand('copy');
-    dummy.remove();        
-});
-document.addEventListener('click', function(ev){
-    if (ev.target.tagName === 'LI') {
-        console.log('clicked dfvsfd')
+    buttonsDiv.innerHTML = "";
+    for (var i = 0; i < btnList.length; i++) {   //adds review items to list        
+        // Create DOM element
+        var btn = document.createElement('button');
+        // Set text of element
+        //btn.value = buttons[i].btn;
+        btn.innerHTML = btnList[i].btn;
+        btn.setAttribute("data-val", btnList[i].txt);
+        btn.setAttribute("title", btnList[i].tip);
+        btn.setAttribute("class", "copyBtn")
+        btn.setAttribute("data-toggle", "tooltip")
+              
+        // Append this element to its parent
+        buttonsDiv.appendChild(btn);
+    }
+};
+createButtonsFromStoredData();
+
+//Document click event Handler
+document.addEventListener('click', function (ev) {
+    if (ev.target.tagName === 'SPAN') {
+        hideItem(ev.target);
+        getStoredData();
+        createButtonsFromStoredData();
     }
     if (ev.target.matches('button')) {
-        console.log('clicked button')
+        copyButtonDataValToClipBoard(ev)
+    }
+    if (ev.target.id === ('add')) {
+        var inputValue = document.getElementById('btnDisplay').value;
+        if (inputValue === '') {
+            alert('Add Copy Button Display and Text to copy');
+        } else {
+            console.log('add button clicked');
+            addButtontoLocalStorage();     
+            getStoredData();
+            createButtonsFromStoredData()
+           };
+
     }
 });
+
+function copyButtonDataValToClipBoard(ev) {
+    var data = ev.target.getAttribute('data-val');
+    var dummy = $('<input>').val(data).appendTo('body').select();
+    document.execCommand('copy');
+    dummy.remove();
+};
