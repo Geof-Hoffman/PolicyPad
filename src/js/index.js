@@ -21,7 +21,7 @@ const createMainWindow = () => {
   mainWindow.loadFile(path.join(__dirname, '../html/index.html'));  
   
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  //mainWindow.webContents.openDevTools();
   ipcMain.on('filesList:send', function(e, item){
     console.log(item);
     mainWindow.webContents.send('filesList:send', item);
@@ -32,6 +32,7 @@ const createMainWindow = () => {
   //insert Menu
   Menu.setApplicationMenu(mainMenu);
 };
+
 const createCurrentFilesWindow = () => {
   currentFileWindow = new BrowserWindow({
     width: 400,
@@ -92,7 +93,21 @@ const createEditBtnsWindow = () => {
   //garbage collection
   currentFileWindow.on('closed',()=> currentFileWindow=null);  
 };
-
+const createEditStateDataWindow = () => {
+  currentFileWindow = new BrowserWindow({
+    width: 400,
+    height: 400,
+    show: true,
+    webPreferences:{
+      nodeIntegration: true,
+    },
+    title:'Edit State Specific Data'
+  });
+  currentFileWindow.loadFile(path.join(__dirname, '../html/editStateData.html'));
+  currentFileWindow.webContents.openDevTools();
+  //garbage collection
+  currentFileWindow.on('closed',()=> currentFileWindow=null);  
+};
 
 
 // This method will be called when Electron has finished
@@ -143,7 +158,7 @@ const mainMenuTemplate = [
         }
       },
       {
-        label: 'View Problem Files list',
+        label: 'View Problem Files',
         click(){
           createProblemFilesWindow();
         }
@@ -160,11 +175,16 @@ const mainMenuTemplate = [
   {
     label: '&Edit',
     submenu: [
-      {label:'edit state data'},
-      {
+       {
         label:'Edit Copy Buttons',
         click(){
           createEditBtnsWindow();
+        }
+      },
+      {
+        label:'Edit State Data',
+        click(){
+          createEditStateDataWindow();
         }
       }
     ]

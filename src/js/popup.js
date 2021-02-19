@@ -1,30 +1,36 @@
+// gets field values from localStorage
 var fileNumVal = (localStorage.fileNum) ? localStorage.fileNum : '';
-var stateNameVal = (localStorage.stateName)? localStorage.stateName:'';
-var myInputVal = (localStorage.myInput)?localStorage.myInput:'';
-var vestingVal = (localStorage.vesting)?localStorage.vesting:'';
-var addressVal = (localStorage.address)?localStorage.address:'';
-var loanAmtVal = (localStorage.loanAmount)?localStorage.loanAmount:'';
-var loanTypeVal = (localStorage.type)?localStorage.type:'';
-var loanDateVal = (localStorage.date)?localStorage.date:'';
-var optEndOneVal = (localStorage.optEndOne)?localStorage.optEndOne:'';
-var optEndTwoVal = (localStorage.optEndTwo)?localStorage.optEndTwo:'';
-var optEndThreeVal = (localStorage.optEndThree)?localStorage.optEndThree:'';
-var premiumVal = (localStorage.premium)?localStorage.premium:'';
+var stateNameVal = (localStorage.stateName) ? localStorage.stateName : '';
+var myInputVal = (localStorage.myInput) ? localStorage.myInput : '';
+var vestingVal = (localStorage.vesting) ? localStorage.vesting : '';
+var addressVal = (localStorage.address) ? localStorage.address : '';
+var loanAmtVal = (localStorage.loanAmount) ? localStorage.loanAmount : '';
+var loanTypeVal = (localStorage.type) ? localStorage.type : '';
+var loanDateVal = (localStorage.date) ? localStorage.date : '';
+var optEndOneVal = (localStorage.optEndOne) ? localStorage.optEndOne : '';
+var optEndTwoVal = (localStorage.optEndTwo) ? localStorage.optEndTwo : '';
+var optEndThreeVal = (localStorage.optEndThree) ? localStorage.optEndThree : '';
+var premiumVal = (localStorage.premium) ? localStorage.premium : '';
 let uwCheckVal;
-var checkNumVal = (localStorage.checkNum)?localStorage.checkNum:'';
-var costOneVal = (localStorage.costOne)?localStorage.costOne:'';
-var costTwoVal = (localStorage.costTwo)?localStorage.costTwo:'';
-var costThreeVal = (localStorage.costThree)?localStorage.costThree:'';
-var costFourVal = (localStorage.costFour)?localStorage.costFour:'';
-var costFiveVal = (localStorage.costFive)?localStorage.costFive:'';
-
+let display;
+var checkNumVal = (localStorage.checkNum) ? localStorage.checkNum : '';
+var costOneVal = (localStorage.costOne) ? localStorage.costOne : '';
+var costTwoVal = (localStorage.costTwo) ? localStorage.costTwo : '';
+var costThreeVal = (localStorage.costThree) ? localStorage.costThree : '';
+var costFourVal = (localStorage.costFour) ? localStorage.costFour : '';
+var costFiveVal = (localStorage.costFive) ? localStorage.costFive : '';
+//gets file lists from local storage
+var files = (localStorage.filesList) ? localStorage.filesList : '';
+var issuedFiles = (localStorage.issuedFiles) ? localStorage.issuedFiles : [];
+var problemFiles = (localStorage.problemFiles) ? localStorage.problemFiles : [];
+//assign variables to field names 
 var fileNumField = document.getElementById('fileNum');
 var stateNameField = document.getElementById('stateName');
 var myInputField = document.getElementById('myInput');
 var addressField = document.getElementById('address');
 var vestingField = document.getElementById('vesting');
 var loanAmountField = document.getElementById('loanAmount');
-var loanTypeField = document.getElementById('types');
+var loanTypeField = document.getElementById('type');
 var loanDateField = document.getElementById('date');
 var optEndOneField = document.getElementById('optEndOne');
 var optEndTwoField = document.getElementById('optEndTwo');
@@ -37,8 +43,10 @@ var costTwoField = document.getElementById('costTwo');
 var costThreeField = document.getElementById('costThree');
 var costFourField = document.getElementById('costFour');
 var costFiveField = document.getElementById('costFive');
+var endorsementCalcDiv = document.getElementById("bar"); //div with endorsement cost input fields, used to hide div if no charge by state.
+var close = document.getElementsByClassName('close'); // class of dynamic list items close button (used for deleting items from list)
 
-
+//Set field values 
 fileNumField.value = fileNumVal;
 myInputField.value = myInputVal;
 addressField.value = addressVal;
@@ -57,13 +65,13 @@ costTwoField.value = costTwoVal;
 costThreeField.value = costThreeVal;
 costFourField.value = costFourVal;
 costFiveField.value = costFiveVal;
-
-var btnList = (localStorage.getItem('buttonList')) ? JSON.parse(localStorage.getItem('buttonList')) : '';
-var checkList = (localStorage.getItem('checkList')) ? localStorage.getItem('checkList') : '';
+var list = document.getElementById('myUL');// checklist items
+var btnList = (localStorage.getItem('buttonList')) ? JSON.parse(localStorage.getItem('buttonList')) : '';// 
+//var checkList = (localStorage.getItem('checkList')) ? localStorage.getItem('checkList') : '';
 var myNodelist = document.getElementsByTagName('LI');
-var split = 0;
+let split;
 var list = document.getElementById('myUL');
-var data = [{
+var data = (localStorage.data) ? (localStorage.data) : [{
     id: 'VA',
     state: 'Virginia',
     UW: 'CTIC',
@@ -443,6 +451,11 @@ var data = [{
 
 
 ];
+var stringifyData = JSON.stringify(data);
+//console.log(stringifyData);
+localStorage.setItem('defaultData', stringifyData);
+//console.log(localStorage.data);
+data = (localStorage.data) ? JSON.parse(localStorage.data) : JSON.parse(localStorage.defaultData);
 var buttons = [{
     btn: "Melanie",
     txt: "Melanie S. Johnson",
@@ -486,17 +499,16 @@ var buttons = [{
     txt: "Said deed of trust is secondary and subordinate to the lien of the insured deed of trust set forth under Schedule A hereof.",
     tip: "Subordination Language"
 }];
-var stored = {}; 
+var stored = {};
 //input change event handlers
 document.addEventListener('change', (e) => {
     if (e.target == stateNameField) {
         stateNameVal = e.target.value;
-        console.log(stateNameVal);
         updateState(stateNameVal);
     }
     if (e.target == loanTypeField) {
         loanTypeVal = e.target.value;
-        console.log(e.target);
+        console.log(`change event triggered with ${e.target.value} for value`);
         localStorage.setItem('type', loanTypeVal);
     }
 });
@@ -529,6 +541,11 @@ document.addEventListener('input', (e) => {
         console.log(loanDateVal);
         localStorage.setItem('date', loanDateVal);
     }
+    if (e.target == loanTypeField) {
+        console.log(`input event triggered with ${e.target.value} for value`);
+        loanTypeVal = e.target.value;
+        localStorage.setItem('type', loanTypeVal);
+    }
     if (e.target == optEndOneField) {
         optEndOneVal = e.target.value;
         localStorage.setItem('optEndOne', optEndOneVal);
@@ -542,6 +559,7 @@ document.addEventListener('input', (e) => {
         localStorage.setItem('optEndThree', optEndThreeVal);
     }
     if (e.target == premiumField) {
+        console.log('premium fild event triggered')
         premiumVal = e.target.value;
         localStorage.setItem('premium', premiumVal);
         checkCalc();
@@ -583,10 +601,12 @@ document.addEventListener('input', (e) => {
 });
 //click event handlers
 document.addEventListener('click', function (ev) {
+    if (ev.target.tagName === 'LI') {
+        console.log(ev.target.classList)
+        ev.target.classList.toggle('checked');
+    }
     if (ev.target.tagName === 'SPAN') {
-        // hideItem(ev.target);
-        //  getStoredData();
-        // createButtonsFromStoredData();
+         hideItem(ev.target);       
     }
     if (ev.target.matches('button')) {
         copyButtonDataValToClipBoard(ev)
@@ -603,44 +623,64 @@ document.addEventListener('click', function (ev) {
         console.log('list Item clicked')
     }
     if (ev.target.id === ('issue')) {
-        console.log('Issue button clicked')/*
-        var fileNumber = $('#fileNum').val();
-        console.log(fileNumber);
-        if (fileNumber >= 0) {
-            var files = localStorage.getItem('filesList');
-            var filesList = files.split(',');
-            console.log(filesList);
-            $('#fileNum').val(filesList[0]).val();
-    
-        } else {   /// >=0 is false if file number is in field
-    
-            var files = localStorage.getItem('filesList');
-            var filesList = files.split(',');
-            var currentList = filesList;
-            if (fileNumber == currentList[0]) {
-                finishedList.push(fileNumber);
-                console.log(finishedList);
-                localStorage.setItem('finished', finishedList);
-                $('#fileNum').val('').val();
-            }
-            //console.log(data.finished);
-            /* if(data.finished){
-             var finishedList =data.finished;    
-             console.log(finishedList); 
-             }else{
-              var finishedList =[];
-              console.log("no finished files stored yet")
-             };
-            var issuedFile = currentList.shift();
-            console.log(issuedFile);
-            finishedList.push(issuedFile);
-            console.log(finishedList);
-            localStorage.setItem('filesList', currentList);
-            localStorage.setItem('finished', finishedList);
-            $('#fileNum').val(currentList[0]).val();
-            //stateSelector(currentList[0]);    
-    
-        };*/
+        console.log('Issue button clicked')
+        console.log(fileNumVal);
+        var filesList = files.split(',');
+        var newFile = filesList.shift();
+
+        if (!fileNumVal) {
+            fileNumField.value = (filesList) ? newFile : '';
+            localStorage.setItem('files', filesList);
+            console.log(newFile);
+            console.log(localStorage.files)
+        }
+        if (fileNumVal) {
+            issuedFiles.push(fileNumVal);
+            fileNumField.value = (filesList) ? newFile : '';
+            localStorage.setItem('files', filesList);
+            console.log(newFile);
+            console.log(localStorage.files)
+
+            ///put old file in isssued files list
+            //get new file number
+        }
+        // 
+        // localStorage.setItem('issuedFiles', issuedFiles);
+
+
+
+
+        else {
+            console.log(fileNumVal)  /// >=0 is false if file number is in field
+
+            /* var files = localStorage.getItem('filesList');
+             var filesList = files.split(',');
+             var currentList = filesList;
+             if (fileNumber == currentList[0]) {
+                 finishedList.push(fileNumber);
+                 console.log(finishedList);
+                 localStorage.setItem('finished', finishedList);
+                 $('#fileNum').val('').val();
+             }
+             //console.log(data.finished);
+             /* if(data.finished){
+              var finishedList =data.finished;    
+              console.log(finishedList); 
+              }else{
+               var finishedList =[];
+               console.log("no finished files stored yet")
+              };
+             var issuedFile = currentList.shift();
+             console.log(issuedFile);
+             finishedList.push(issuedFile);
+             console.log(finishedList);
+             localStorage.setItem('filesList', currentList);
+             localStorage.setItem('finished', finishedList);
+             $('#fileNum').val(currentList[0]).val();
+             //stateSelector(currentList[0]);    
+     
+         };*/
+        }
     }
     if (ev.target.id === ('clear')) {
         clear();
@@ -648,8 +688,7 @@ document.addEventListener('click', function (ev) {
     }
 
 });
-
-
+// utility function used for finding indexes or arrays by value
 function find(array, criteriaFn) {
     let current = array
     let next = []
@@ -665,7 +704,8 @@ function find(array, criteriaFn) {
         current = next.shift()
     }
     return null;
-}
+};
+//Displays state dropdown menu
 function displayStates() {
     var stateOptionsOutput = '<option value=""><strong>choose state</strong></option>';
     for (var i = 0; i < data.length; i++) {
@@ -673,19 +713,14 @@ function displayStates() {
     }
     document.getElementById('stateName').innerHTML = stateOptionsOutput;
     if (localStorage.stateName) {
-        console.log(localStorage.stateName)
         stateNameField.value = localStorage.stateName;
     }
 
 }; displayStates();
-function displayList() {
-    var list = document.getElementById('myUL');
-    list.addEventListener('click', function (ev) {
-        if (ev.target.tagName === 'LI') {
-            ev.target.classList.toggle('checked');
-        }
-    },
-        false);
+
+
+//old functions... not sure if I'll use them
+/*function displayList() {
     var i;
     var myNodelist = document.getElementsByTagName('LI');
     for (i = 0; i < myNodelist.length; i++) {
@@ -696,7 +731,7 @@ function displayList() {
         myNodelist[i].appendChild(span);
     }
 };
-//old functions not sure if I'll use them
+
 /*
 function getStoredData() {
     stored.filesList = localStorage.getItem('filesList');
@@ -744,7 +779,7 @@ $('#date').val(stored.date).val();
 function createButtonsFromStoredData() {
     setFileNumDataVal();
     var btnList = (localStorage.buttonList) ? JSON.parse(localStorage.buttonList) : buttons;
-    console.log(btnList);
+    // console.log(btnList);
     var buttonsDiv = document.getElementById('buttonsDiv');
     buttonsDiv.innerHTML = "";
     for (var i = 0; i < btnList.length; i++) {   //adds review items to list        
@@ -761,8 +796,7 @@ function createButtonsFromStoredData() {
         buttonsDiv.appendChild(btn);
     }
 
-}; 
-createButtonsFromStoredData();
+};createButtonsFromStoredData();
 function setFileNumDataVal() {
     /*
  var FileNumBtnIndex = btnList.findIndex((data) => data.btn == "File#");
@@ -773,11 +807,11 @@ function setFileNumDataVal() {
  */
 };
 function makeList(stateArray) {
-    console.log('makeList called');
+    //  console.log('makeList called');
     var tempList = [];
     list.innerHTML = '';  //clears list     
     var reviewList = (stateArray) ? stateArray.review : [];
-    console.log(reviewList);
+    //   console.log(reviewList);
     for (var i = 0; i < reviewList.length; i++) {
         tempList.unshift(reviewList[i])
     }
@@ -799,24 +833,51 @@ function newElement(listItem) {
 };
 function updateState(stateName) {
     localStorage.setItem('stateName', stateName);
-    // $('#stateName').val(stateName).val();
     stateArray = find(data, index => index.state === stateName);
+    split = (stateArray) ? stateArray.split / 100 : 0;
     makeList(stateArray);
+
     $('#split').text(`UW:${stateArray ? stateArray.UW : ''} 
     split:${stateArray ? stateArray.split : ''} 
     CPL:${stateArray ? stateArray.cpl : ''} 
     Rider:${stateArray ? stateArray.pud : ''}`
     );
 
-    //  var lps = (stateArray) ? data[data.findIndex(data => data.state === stateName)].lps : [];
-    // console.log(LPS);
-    // $("#lps").attr("title", lps);
-    //var ups = (stateArray) ? data[data.findIndex(data => data.state === stateName)].ups : [];;
-    //var jacket = (stateArray) ? data[data.findIndex(data => data.state === stateName)].jacket : '';
-    //$("#ups").attr("title", ups);
-    //$("#jacket").attr("title", jacket);
-};updateState(stateNameVal);
-var close = document.getElementsByClassName('close');
+    var lps = (stateArray) ? data[data.findIndex(data => data.state === stateName)].lps : [];
+    $("#lps").attr("title", lps);
+    var ups = (stateArray) ? data[data.findIndex(data => data.state === stateName)].ups : [];;
+    var jacket = (stateArray) ? data[data.findIndex(data => data.state === stateName)].jacket : '';
+    $("#ups").attr("title", ups);
+    $("#jacket").attr("title", jacket);
+    display = (stateArray) ? stateArray.end : false;
+    toggleEndorsementCalc(display);
+    checkCalc();
+}; updateState(stateNameVal);
+function toggleEndorsementCalc(display) {
+    console.log('toggleEndorsmentCalc Ran')
+    if (display) {
+        console.log('display=block');
+        endorsementCalcDiv.style.display = 'block';
+        costOneField.value = localStorage.costOne;
+        costTwoField.value = localStorage.costTwo;
+        costThreeField.value = localStorage.costThree;
+        costFourField.value = localStorage.costFour;
+        costFiveField.value = localStorage.costFive;
+        checkCalc();
+
+    }
+    if (!display) {
+        console.log('display=none');
+        endorsementCalcDiv.style.display = 'none';
+        costOneField.value = '';
+        costTwoField.value = '';
+        costThreeField.value = '';
+        costFourField.value = '';
+        costFiveField.value = '';
+        checkCalc();
+    }
+
+};
 function hideItem() {
     var i;
     for (i = 0; i < close.length; i++) {
@@ -828,6 +889,7 @@ function hideItem() {
 };
 function checkCalc() {
     //captures numbers from inputs 
+    // console.log('checkCalc ran');
     var premium = parseFloat($('#premium').val());
     if (isNaN(premium)) {
         premium = 0;
@@ -855,8 +917,9 @@ function checkCalc() {
     var total = parseFloat(premium) + parseFloat(costOne) + parseFloat(costTwo) + parseFloat(costThree) + parseFloat(costFour) + parseFloat(costFive);
     var totalFixed = total * split;
     var UWcheck = totalFixed.toFixed(2);
-    $('#UWsplit').val(UWcheck).val();
-}; 
+    uwCheckField.value = UWcheck;
+
+};
 checkCalc();
 function clear() {
     localStorage.setItem('fileNum', '');
@@ -874,31 +937,11 @@ function clear() {
     localStorage.setItem('costThree', '');
     localStorage.setItem('costFour', '');
     localStorage.setItem('costFive', '')
-    localStorage.setItem('stateName', '');
     localStorage.setItem('date', '');
     localStorage.setItem('checkNum', '');
     localStorage.setItem('myInput', '');
-    
-    location.reload();
-/*
-    $('#fileNum').val('').val();
-    $('#address').val('').val();
-    $('#vesting').val('').val();
-    $('#loanAmount').val('').val();
-    $('#type').val('').val();
-    $('#date').val('').val();
-    $('#optEndOne').val('').val();
-    $('#optEndTwo').val('').val();
-    $('#optEndThree').val('').val();
-    $('#premium').val('').val();
-    $('#costOne').val('').val();
-    $('#costTwo').val('').val();
-    $('#costThree').val('').val();
-    $('#costFour').val('').val();
-    $('#costFive').val('').val();
-    $('#date').val('').val();
-    $('#checkNum').val('').val();
 
+    location.reload();
 
     if (stateArray.end != false) {
         $('#bar').toggle(display)
@@ -908,7 +951,7 @@ function clear() {
     };
 
     console.log("values cleared");
-*/};
+};
 function copyButtonDataValToClipBoard(ev) {
     var data = ev.target.getAttribute('data-val');
     var dummy = $('<input>').val(data).appendTo('body').select();
