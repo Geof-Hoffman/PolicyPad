@@ -1,205 +1,171 @@
-const electron = require('electron');
-const { ipcRenderer } = electron;
-var buttons =[  {
-    btn: "first",
-    txt: "first text",
-    tip: "first hover",
+var buttons = [{
+    btn: "Melanie",
+    txt: "Melanie S. Johnson",
+    tip: "",
 
 },
 {
-    btn: "second",
-    txt: "second text",
-    tip: "second hover"
+    btn: "sub",
+    txt: "Said deed of trust is secondary and subordinate to the lien of the insured deed of trust set forth under Schedule A hereof.",
+    tip: "Subordination Language"
 },
 {
-    btn: "third",
-    txt: "third text",
-    tip: "third hover"
-}]
-function newElement() {
-    var li = document.createElement('li');
-    var inputValue = document.getElementById('btnDisplay').value;
-    var t = document.createTextNode(inputValue);
-    li.prepend(t);
-    if (inputValue === '') {
-        // alert('add curative items');
-    } else {
-        document.getElementById('myUL').prepend(li);
-        var list = document.getElementById('myUL');
-        list.addEventListener('click', 
-        function (ev) { 
-            hideItem();
-            hideItem()
-        }, false);
-        var i;
+    btn: "tran",
+    txt: "tran",
+    tip: "searching or trans... doc"
+},
+{
+    btn: "ctic",
+    txt: "ctic",
+    tip: "searching or CTIC notice... doc",
+
+},
+{
+    btn: "LPS",
+    txt: "LOAN POLICY SET",
+    tip: ""
+},
+{
+    btn: "UW SET",
+    txt: "UW SET",
+    tip: ""
+},
+{
+    btn: "FNF Policy Email",
+    txt: "PI-StarterRepositoryShipments@propertyinsight.biz",
+    tip: "",
+
+},
+{
+    btn: "jacket",
+    txt: "Said deed of trust is secondary and subordinate to the lien of the insured deed of trust set forth under Schedule A hereof.",
+    tip: "Subordination Language"
+}];
+var btnList;
+var tempList = [];
+//elements 
+var myNodelist = document.getElementsByTagName('LI');
+var list = document.getElementById('myUL');
+var btnDisplay = document.getElementById('btnDisplay');
+var btnText = document.getElementById('btnText');
+var btnTip = document.getElementById('btnTip');
+
+function getStoredData() {
+    console.log('getStoredData() called');
+    var stored = {};
+    var testForButtonList = (localStorage.getItem('buttonList')) ? JSON.parse(localStorage.getItem('buttonList')) : buttons;
+    stored.buttonList = testForButtonList;
+    btnList = stored.buttonList;
+    console.log(btnList)
+    displayList();
+    }; getStoredData();    
+
+function displayList() {
+    tempList =[];
+    console.log('displayList() called');
+    list.innerHTML = '';
+    for (var i = 0; i < btnList.length; i++) {       
+        tempList.unshift(btnList[i].btn)
     }
-    document.getElementById('btnDisplay').value = '';
-    document.getElementById('btnText').value = '';
+    tempList.forEach(element => newElement(element));
+    console.log(tempList);
+}; 
+function addButtontoLocalStorage() {
+    console.log('addButtontoLocalStorage() called');
+    var storedButtons = btnList;
+    var newButtonObj = {};
+    newButtonObj.btn = btnDisplay.value;
+    newButtonObj.txt = btnText.value;
+    newButtonObj.tip = btnTip.value;
+    btnDisplay.value = '';
+    btnText.value = '';
+    btnTip.value = '';
+    storedButtons.push(newButtonObj);
+    var StringifyStoredButtons = JSON.stringify(storedButtons);
+    localStorage.setItem('buttonList', StringifyStoredButtons); 
+};
+function newElement(inputValue) {
+    console.log(`newElement(${inputValue}) called`);
+    var li = document.createElement('li');
+    var t = document.createTextNode(inputValue);   
     var span = document.createElement('SPAN');
     var txt = document.createTextNode('\u00D7');
-    span.className = 'close';
-    span.prepend(txt);
-    li.prepend(span);
-
-    for (i = 0; i < close.length; i++) {
-        close[i].onclick = function () {
-            var div = this.parentElement;
-            div.style.display = 'none';
-        }
-    }
+    //adds close class to x and adds it to list item
+    span.className = 'close';   
+    span.id = btnList.findIndex((btnList)=> btnList.btn === inputValue) 
+    span.appendChild(txt);
+    li.prepend(t);
+    li.appendChild(span);
+    list.prepend(li);      
 };
-function hideItem() {
-    var close = document.getElementsByClassName('close');
-    var i;
-    for (i = 0; i < close.length; i++) {
-        close[i].onclick = function () {
-            var div = this.parentElement;
-            div.style.display = 'none';
-        }
-    }
+var close = document.getElementsByClassName('close');
+function hideItem(ev) {
+    console.log('hideItem(ev) called');
+   var indexToRemove = ev.id;
+   console.log(btnList);
+   btnList.splice(indexToRemove, 1);
+   var StringifyStoredButtons = JSON.stringify(btnList);
+   localStorage.setItem('buttonList', StringifyStoredButtons); 
+    
 };
 
 
-    document.addEventListener('click', function (event) {
-
-        if (event.target.matches('#add')) {
-            var e = $(this).val();
-            newElement(e);
-        }
+function clear() {
     
-        if (event.target.matches('.close')) {
-            console.log('close clicked')
-            hideItem();
-            hideItem();
-        }
-    
-    }, false);
 
+    // localStorage.setItem('fileNum', ''); 
 
-function dummyToHideTable(){
+    // $('#fileNum').val('').val();
 
-       
-/*
-        var buttons =[  {
-                            btn: "first",
-                            txt: "first text",
-                            tip: "first hover",
+};
 
-                        },
-                        {
-                            btn: "second",
-                            txt: "second text",
-                            tip: "second hover"
-                        },
-                        {
-                            btn: "third",
-                            txt: "third text",
-                            tip: "third hover"
-                        }]
-        var $myTable = $('#my-table');
-        var rowElements = [];
-        var count = data.length;
-        var i;
-        var row;
-        for ( i = 0; i < count; ++i ) {
-            rowElements.push(
-                $('<tr></tr>').append(
-                    $('<td></td>').html(row.type),
-                    $('<td></td>').html(row.content)
-                )
-            );
-        }
-      
-        $('#button').on('click', function(){
-            console.log('button clicked')
-        });
-        console.log('testing... is this script on')
-        function buttonsAdd() {
-            if ($("#buttonTable tbody").length == 0) {
-                $("#buttonTable").append("<tbody></tbody>");
-            }
-            $("#buttonTable tbody").append(function(){
-                var i;
-                for (i = 0; i < buttons.length; i++) {
-                  text += `<td>${buttons[i].btn}</td>` + `<td>${buttons[i].txt}</td>` + `<td>${buttons[i].hov}</td>`
-                   
-            "<tr>" +
-                "<td>My First Video</td>" +
-                "<td>6/11/2015</td>" +
-                "<td>www.pluralsight.com</td>" +
-                "</tr>");
-            };
-        }
-        
-        
-        buttonsAdd();
-
-    </script>-->
-*/
-/*function addRow() {
-          
-    var btnDisplay = document.getElementById("btnDisplay");
-    var btnText = document.getElementById("btnText");
-    var table = document.getElementById("myTableData");
- 
-    var rowCount = table.rows.length;
-    var row = table.insertRow(rowCount);
- 
-    row.insertCell(0).innerHTML= '<input type="button" value = "Delete" onClick="Javacsript:deleteRow(this)">';
-    row.insertCell(1).innerHTML= btnDisplay.value;
-    row.insertCell(2).innerHTML= btnText.value;
- 
-}
- 
-function deleteRow(obj) {
-      
-    var index = obj.parentNode.parentNode.rowIndex;
-    var table = document.getElementById("myTableData");
-    table.deleteRow(index);
-    
-}
- 
-function addTable() {
-      
-    var myTableDiv = document.getElementById("myDynamicTable");
-      
-    var table = document.createElement('TABLE');
-    table.border='1';
-    
-    var tableBody = document.createElement('TBODY');
-    table.appendChild(tableBody);
-      
-    for (var i=0; i<3; i++){
-       var tr = document.createElement('TR');
-       tableBody.appendChild(tr);
-       
-       for (var j=0; j<4; j++){
-           var td = document.createElement('TD');
-           td.width='75';
-           td.appendChild(document.createTextNode("Cell " + i + "," + j));
-           tr.appendChild(td);
-       }
+function createButtonsFromStoredData() {
+    var buttonsDiv = document.getElementById('buttonsDiv');
+    buttonsDiv.innerHTML = "";
+    for (var i = 0; i < btnList.length; i++) {   //adds review items to list        
+        // Create DOM element
+        var btn = document.createElement('button');
+        // Set text of element
+        //btn.value = buttons[i].btn;
+        btn.innerHTML = btnList[i].btn;
+        btn.setAttribute("data-val", btnList[i].txt);
+        btn.setAttribute("title", btnList[i].tip);
+        btn.setAttribute("class", "copyBtn")
+        btn.setAttribute("data-toggle", "tooltip")
+              
+        // Append this element to its parent
+        buttonsDiv.appendChild(btn);
     }
-    myTableDiv.appendChild(table);
-    
-}
- 
-function load() {
-    
-    console.log("Page load finished");
- 
-}
-var addButton = document.getElementById("add");
+};
+createButtonsFromStoredData();
 
-document.addEventListener('click', function (event) {
+//Document click event Handler
+document.addEventListener('click', function (ev) {
+    if (ev.target.tagName === 'SPAN') {
+        hideItem(ev.target);
+        getStoredData();
+        createButtonsFromStoredData();
+    }
+    if (ev.target.matches('button')) {
+        copyButtonDataValToClipBoard(ev)
+    }
+    if (ev.target.id === ('add')) {
+        var inputValue = document.getElementById('btnDisplay').value;
+        if (inputValue === '') {
+            alert('Add Copy Button Display and Text to copy');
+        } else {
+            console.log('add button clicked');
+            addButtontoLocalStorage();     
+            getStoredData();
+            createButtonsFromStoredData()
+           };
 
-	if (event.target.matches('#add')) {
-		addRow();
-	}
+    }
+});
 
-	if (event.target.matches('.close')) {
-		// Run your code to close a modal
-	}
-
-}, false);
-*/}
+function copyButtonDataValToClipBoard(ev) {
+    var data = ev.target.getAttribute('data-val');
+    var dummy = $('<input>').val(data).appendTo('body').select();
+    document.execCommand('copy');
+    dummy.remove();
+};

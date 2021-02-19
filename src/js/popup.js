@@ -20,9 +20,9 @@ var costThreeVal = (localStorage.costThree) ? localStorage.costThree : '';
 var costFourVal = (localStorage.costFour) ? localStorage.costFour : '';
 var costFiveVal = (localStorage.costFive) ? localStorage.costFive : '';
 //gets file lists from local storage
-var files = (localStorage.filesList) ? localStorage.filesList : '';
-var issuedFiles = (localStorage.issuedFiles) ? localStorage.issuedFiles : [];
-var problemFiles = (localStorage.problemFiles) ? localStorage.problemFiles : [];
+var files = (localStorage.filesList) ? localStorage.filesList.split(',') : [];
+var issuedFiles = (localStorage.issuedFiles) ? localStorage.issuedFiles.split(',') : [];
+var problemFiles = (localStorage.problemFiles) ? JSON.parse(localStorage.problemFiles) : [];
 //assign variables to field names 
 var fileNumField = document.getElementById('fileNum');
 var stateNameField = document.getElementById('stateName');
@@ -65,9 +65,9 @@ costTwoField.value = costTwoVal;
 costThreeField.value = costThreeVal;
 costFourField.value = costFourVal;
 costFiveField.value = costFiveVal;
+
+var btnList = (localStorage.buttonList) ? JSON.parse(localStorage.buttonList) : buttons;
 var list = document.getElementById('myUL');// checklist items
-var btnList = (localStorage.getItem('buttonList')) ? JSON.parse(localStorage.getItem('buttonList')) : '';// 
-//var checkList = (localStorage.getItem('checkList')) ? localStorage.getItem('checkList') : '';
 var myNodelist = document.getElementsByTagName('LI');
 let split;
 var list = document.getElementById('myUL');
@@ -602,11 +602,10 @@ document.addEventListener('input', (e) => {
 //click event handlers
 document.addEventListener('click', function (ev) {
     if (ev.target.tagName === 'LI') {
-        console.log(ev.target.classList)
         ev.target.classList.toggle('checked');
     }
     if (ev.target.tagName === 'SPAN') {
-         hideItem(ev.target);       
+        hideItem(ev.target);
     }
     if (ev.target.matches('button')) {
         copyButtonDataValToClipBoard(ev)
@@ -624,8 +623,36 @@ document.addEventListener('click', function (ev) {
     }
     if (ev.target.id === ('issue')) {
         console.log('Issue button clicked')
+
+        function issueFileNumber() {
+            var issuedList= issuedFiles;            
+            var filesList = files;
+            
+            // when issue is clicked, if file number and file list, 
+            if (fileNumVal && filesList) {
+                // - move issued file number to issued list, 
+                // - get new file number and remove from list
+               
+                // - put new file number in filenumber field
+                if (fileNumVal === fileslist[0]) {
+                    var oldFile = fileslist.shift();
+                    var newFile = fileslist[0];
+                }
+                if (fileNumVal != filesList[0]) {
+                    var oldFile = fileNumVal;
+                    var newFile = fileslist[0];
+                }
+                fileNumField.value = newFile;
+                issuedList.push(oldFile);
+                var stringifiedFilesList = JSON.stringify(fileslist);
+                var stringifiedIssuedList = JSON.stringify(IssuedList);
+                localStorage.setItem('filesList',stringifiedFilesList)
+                localStorage.setItem('issuedList', stringifiedIssuedList)
+                // - notify, (issued file added to issued list)     
+            }
+        }
         console.log(fileNumVal);
-        var filesList = files.split(',');
+        var filesList = files
         var newFile = filesList.shift();
 
         if (!fileNumVal) {
@@ -688,6 +715,11 @@ document.addEventListener('click', function (ev) {
     }
 
 });
+$('#myInput').keyup(function (event) {
+    if (event.keyCode === 13) {
+        $('#add').click();
+    }
+});
 // utility function used for finding indexes or arrays by value
 function find(array, criteriaFn) {
     let current = array
@@ -717,72 +749,11 @@ function displayStates() {
     }
 
 }; displayStates();
-
-
-//old functions... not sure if I'll use them
-/*function displayList() {
-    var i;
-    var myNodelist = document.getElementsByTagName('LI');
-    for (i = 0; i < myNodelist.length; i++) {
-        var span = document.createElement('SPAN');
-        var txt = document.createTextNode('\u00D7');
-        span.className = 'close';
-        span.appendChild(txt);
-        myNodelist[i].appendChild(span);
-    }
-};
-
-/*
-function getStoredData() {
-    stored.filesList = localStorage.getItem('filesList');
-    addressVal = localStorage.getItem('address');
-    stored.vesting = localStorage.getItem('vesting');
-    stored.loanAmount = localStorage.getItem('loanAmount');
-    stored.type = localStorage.getItem('type');
-    stored.date = localStorage.getItem('date');
-    stored.optEndOne = localStorage.getItem('optEndOne');
-    stored.optEndTwo = localStorage.getItem('optEndTwo');
-    stored.optEndThree = localStorage.getItem('optEndThree');
-    stored.premium = localStorage.getItem('premium');
-    stored.costOne = localStorage.getItem('costOne');
-    stored.costTwo = localStorage.getItem('costTwo')
-    stored.costThree = localStorage.getItem('costThree');
-    stored.costFour = localStorage.getItem('costFour');
-    stored.costFive = localStorage.getItem('costFive')
-    stored.optEndTwo = localStorage.getItem('optEndTwo');
-    stored.date = localStorage.getItem('date');
-    stored.checkNum = localStorage.getItem('checkNum');
-    stored.finished = localStorage.getItem('finished');
-    stored.btnList = (localStorage.getItem('buttonList'));
-    // console.log(stored);
-};
-*/
-/*
-$('#stateName').val(stateName).val();
-$('#fileNum').val(stored.fileNum).val();
-$('#checkNum').val(stored.checkNum).val();
-$('#address').val(stored.address).val();
-$('#vesting').val(stored.vesting).val();
-$('#loanAmount').val(stored.loanAmount).val();
-$('#type').val(stored.type).val();
-$('#optEndOne').val(stored.optEndOne).val();
-$('#optEndTwo').val(stored.optEndTwo).val();
-$('#optEndThree').val(stored.optEndThree).val();
-$('#premium').val(stored.premium).val();
-$('#costOne').val(stored.costOne).val();
-$('#costTwo').val(stored.costTwo).val();
-$('#costThree').val(stored.costThree).val();
-$('#costFour').val(stored.costFour).val();
-$('#costFive').val(stored.costFive).val();
-$('#date').val(stored.date).val();
-*/
 function createButtonsFromStoredData() {
     setFileNumDataVal();
-    var btnList = (localStorage.buttonList) ? JSON.parse(localStorage.buttonList) : buttons;
-    // console.log(btnList);
     var buttonsDiv = document.getElementById('buttonsDiv');
     buttonsDiv.innerHTML = "";
-    for (var i = 0; i < btnList.length; i++) {   //adds review items to list        
+    for (var i = 0; i < btnList.length; i++) {   //adds buttons dynamically from stored values       
         // Create DOM element
         var btn = document.createElement('button');
         // Set text of element
@@ -796,22 +767,11 @@ function createButtonsFromStoredData() {
         buttonsDiv.appendChild(btn);
     }
 
-};createButtonsFromStoredData();
-function setFileNumDataVal() {
-    /*
- var FileNumBtnIndex = btnList.findIndex((data) => data.btn == "File#");
- console.log(FileNumBtnIndex);
- btnList[FileNumBtnIndex].txt = localStorage.getItem('fileNum');
- var stringifyBtnList = JSON.stringify(btnList);
- localStorage.setItem('buttonList', stringifyBtnList)
- */
-};
+}; createButtonsFromStoredData();
 function makeList(stateArray) {
-    //  console.log('makeList called');
     var tempList = [];
     list.innerHTML = '';  //clears list     
     var reviewList = (stateArray) ? stateArray.review : [];
-    //   console.log(reviewList);
     for (var i = 0; i < reviewList.length; i++) {
         tempList.unshift(reviewList[i])
     }
@@ -824,7 +784,6 @@ function newElement(listItem) {
     var txt = document.createTextNode('\u00D7');
     //adds close class to x and adds it to list item
     span.className = 'close';
-    //span.id = tempList.findIndex(()=> tempList === listItem) 
     span.appendChild(txt);
     li.prepend(t);
     li.appendChild(span);
@@ -844,19 +803,24 @@ function updateState(stateName) {
     );
 
     var lps = (stateArray) ? data[data.findIndex(data => data.state === stateName)].lps : [];
-    $("#lps").attr("title", lps);
     var ups = (stateArray) ? data[data.findIndex(data => data.state === stateName)].ups : [];;
     var jacket = (stateArray) ? data[data.findIndex(data => data.state === stateName)].jacket : '';
-    $("#ups").attr("title", ups);
-    $("#jacket").attr("title", jacket);
     display = (stateArray) ? stateArray.end : false;
+    updateLpsButton(lps);
+    updateUwsButton(ups);
+    updateJacketButton(jacket);
     toggleEndorsementCalc(display);
     checkCalc();
+
+    $("#lps").attr("title", lps);
+    $("#ups").attr("title", ups);
+    $("#jacket").attr("title", jacket);
+
+
 }; updateState(stateNameVal);
 function toggleEndorsementCalc(display) {
     console.log('toggleEndorsmentCalc Ran')
     if (display) {
-        console.log('display=block');
         endorsementCalcDiv.style.display = 'block';
         costOneField.value = localStorage.costOne;
         costTwoField.value = localStorage.costTwo;
@@ -867,7 +831,6 @@ function toggleEndorsementCalc(display) {
 
     }
     if (!display) {
-        console.log('display=none');
         endorsementCalcDiv.style.display = 'none';
         costOneField.value = '';
         costTwoField.value = '';
@@ -967,11 +930,29 @@ function copyNotification(data) {
         console.log('Notification clicked')
     }
 };
-$('#myInput').keyup(function (event) {
-    if (event.keyCode === 13) {
-        $('#add').click();
-    }
-});
+
+//functions that aren't working yet
+//updates LPS button with state specific LPS
+function updateLpsButton(lps) {
+    console.log(`updateLpsButton called with ${lps}`);
+};//
+function updateUwsButton(uws) {
+    console.log(`updateUwsButton called with ${uws}`)
+};
+function updateJacketButton(jacket) {
+    console.log(`updateJacketButton called`)
+};
+function setFileNumDataVal() {
+    console.log('setFileNumDataVal called')
+    /*
+ var FileNumBtnIndex = btnList.findIndex((data) => data.btn == "File#");
+ console.log(FileNumBtnIndex);
+ btnList[FileNumBtnIndex].txt = localStorage.getItem('fileNum');
+ var stringifyBtnList = JSON.stringify(btnList);
+ localStorage.setItem('buttonList', stringifyBtnList)
+ */
+};
+
 
 
 

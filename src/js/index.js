@@ -43,7 +43,7 @@ const createCurrentFilesWindow = () => {
     },
     title:'Paste in or Clear Current Files '
   });
-  currentFileWindow.loadFile(path.join(__dirname, '../html/current.html'));
+  currentFileWindow.loadFile(path.join(__dirname, '../html/currentFiles.html'));
   currentFileWindow.webContents.openDevTools();
   //garbage collection
   currentFileWindow.on('closed',()=> currentFileWindow=null);  
@@ -63,21 +63,7 @@ const createProblemFilesWindow = () => {
   //garbage collection
   currentFileWindow.on('closed',()=> currentFileWindow=null);  
 };
-const createAddProblemWindow = () => {
-  currentFileWindow = new BrowserWindow({
-    width: 200,
-    height: 300,
-    show: true,
-    webPreferences:{
-      nodeIntegration: true,
-    },
-    title:'Problem files'
-  });
-  currentFileWindow.loadFile(path.join(__dirname, '../html/addProblem.html'));
-  currentFileWindow.webContents.openDevTools();
-  //garbage collection
-  currentFileWindow.on('closed',()=> currentFileWindow=null);  
-};
+
 const createEditBtnsWindow = () => {
   currentFileWindow = new BrowserWindow({
     width: 400,

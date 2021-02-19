@@ -1,1 +1,0 @@
-console.log(' main.js running in current.html');

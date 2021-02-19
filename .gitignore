@@ -40,13 +40,6 @@ jspm_packages/
 bootstrap.js
 jquery-3.1.0.min.js
 
-
-# TypeScript v1 declaration files
-typings/
-
-# TypeScript cache
-*.tsbuildinfo
-
 # Optional npm cache directory
 .npm
 
@@ -93,3 +86,9 @@ typings/
 # Electron-Forge
 out/
 
+#scrap Paper/ not ready yet
+editBtns_.js
+*/addProblemPopUp.html
+problemFile.html
+Untitled-1.js
+Untitled-1.sh
