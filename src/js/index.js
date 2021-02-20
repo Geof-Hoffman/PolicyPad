@@ -45,7 +45,7 @@ const createCurrentFilesWindow = () => {
     title:'Paste in or Clear Current Files '
   });
   currentFileWindow.loadFile(path.join(__dirname, '../html/currentFiles.html'));
-  currentFileWindow.webContents.openDevTools();
+  //currentFileWindow.webContents.openDevTools();
   //garbage collection
   currentFileWindow.on('closed',()=> currentFileWindow=null);  
 };
@@ -60,7 +60,7 @@ const createProblemFilesWindow = () => {
     title:'Problem files'
   });
   currentFileWindow.loadFile(path.join(__dirname, '../html/problemFile.html'));
-  currentFileWindow.webContents.openDevTools();
+  //currentFileWindow.webContents.openDevTools();
   //garbage collection
   currentFileWindow.on('closed',()=> currentFileWindow=null);  
 };
@@ -76,7 +76,7 @@ const createEditBtnsWindow = () => {
     title:'enter button info to add to main screen'
   });
   currentFileWindow.loadFile(path.join(__dirname, '../html/editBtns.html'));
-  currentFileWindow.webContents.openDevTools();
+  //currentFileWindow.webContents.openDevTools();
   //garbage collection
   currentFileWindow.on('closed',()=> currentFileWindow=null);  
 };
@@ -91,7 +91,7 @@ const createEditStateDataWindow = () => {
     title:'Edit State Specific Data'
   });
   currentFileWindow.loadFile(path.join(__dirname, '../html/editStateData.html'));
-  currentFileWindow.webContents.openDevTools();
+ // currentFileWindow.webContents.openDevTools();
   //garbage collection
   currentFileWindow.on('closed',()=> currentFileWindow=null);  
 };

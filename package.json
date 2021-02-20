@@ -1,19 +1,39 @@
 {
-  "name": "policy-pad",
-  "productName": "policy-pad",
+  "name": "policy_pad",
+  "productName": "PolicyPad",
   "version": "1.1.0",
   "description": "My Electron application description",
   "main": "src/js/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/Geof-Hoffman/PolicyPad.git"
-},
+  },
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "echo \"No linting configured\""
+    "lint": "echo \"No linting configured\"",
+    "build-installer": "electron-builder",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "policy.pad",
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "src/icon.ico"
+    },
+    "ncis": {
+      "installerIcon": "src/icon.ico",
+      "uninstallerIcon": "src/icon.ico",
+      "uninstallDisplayName": "PolicyPad",
+      "license": "license.txt",
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
   },
   "keywords": [],
   "author": {
@@ -23,32 +43,47 @@
   "license": "MIT",
   "config": {
     "forge": {
-      "packagerConfig": {},
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "policy_pad"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
+      "make_targets": {
+        "win32": [
+          "squirrel"
+        ],
+        "darwin": [
+          "zip",
+          "dmg"
+        ]
+      },
+      "publish_targets": {
+        "win32": [
+          "github"
+        ],
+        "darwin": [
+          "github"
+        ]
+      },
+      "electronPackagerConfig": {
+        "packageManager": "npm",
+        "icon": "src/resources/icon",
+        "asar": true,
+        "quiet": false,
+        "arch": "all"
+      },
+      "electronWinstallerConfig": {
+        "name": "PolicyPad",
+        "appUserModelId": "PolicyPad",
+        "manufacturer": "Geof.Hoffman",
+        "ui": {
+          "enabled": true,
+          "chooseDirectory": true
         }
-      ]
+      },
+      "github_repository": {
+        "owner": "geof.hoffman",
+        "name": "geof.hoffman"
+      }
     }
   },
   "dependencies": {
+    
     "electron-squirrel-startup": "^1.0.0",
     "update-electron-app": "^2.0.1"
   },
