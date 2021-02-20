@@ -85,7 +85,6 @@ function addButtontoLocalStorage() {
     localStorage.setItem('buttonList', StringifyStoredButtons); 
 };
 function newElement(inputValue) {
-    console.log(`newElement(${inputValue}) called`);
     var li = document.createElement('li');
     var t = document.createTextNode(inputValue);   
     var span = document.createElement('SPAN');
